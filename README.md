@@ -10,7 +10,7 @@ Top of the libbun.org
 
 Full screen playground
 
-## Requirements
+## Playground Requirements
 
 - Linux or OS X (not working in Windows)
 - python 2.7
