@@ -1,5 +1,15 @@
 # Libbun.org
 
+## site map
+
+* index.html
+
+Top of the libbun.org
+
+* popup.html(under construction)
+
+Full screen playground
+
 ## Requirements
 
 - Linux or OS X (not working in Windows)
