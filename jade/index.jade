@@ -33,10 +33,19 @@ html(lang='en')
           h3 Overview
           p Libbun is an open source parser and generator library that makes it easy to translate your program into another language.
           p
-            a(href='#') Download Libbun
+            a.btn.btn-primary(href='https://github.com/libbun/libbun/archive/master.zip') Download Libbun
+            | &nbsp;
+            a.btn.btn-default(href='https://github.com/libbun/libbun') Get Source Code
+          h3 Documents
+          p
+            a(href='#') BunLanguage Grammar
+          p
+            a(href='#') How to develop a new generator for your favorite language
+          p
+            a(href='#') Libbun API Reference
         .col-md-6.col-xs-6.col-sm-6.col-lg-6
           h3 Try Libbun
-          .row(style='padding-bottom: 3px;')
+          p
             .form-inline
               | Sample:&nbsp;
               select.form-control#sample-selector
@@ -47,7 +56,7 @@ html(lang='en')
               a.btn.btn-primary#compile(href='#', role='button') Compile
               a.btn.btn-default.pull-right#fullscreen(href='#')
                 span.glyphicon.glyphicon-resize-full
-          .row
+          p
             #bun-editor
               | // You can edit this code!
               | function foo&lpar;n: int&rpar; &lcub;
@@ -57,11 +66,6 @@ html(lang='en')
             #output-viewer
               | // Generated output
           br
-      .row
-        .col-md-6.col-xs-6.col-sm-6.col-lg-6
-          h3 Featured
-        .col-md-6.col-xs-6.col-sm-6.col-lg-6
-          h3 Featured
     //a(href="https://github.com/libbun/libbun")
       img(style="position: absolute; top: 0; right: 0; border: 0; z-index: 1031;", src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67", alt="Fork me on GitHub", data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png")
     .script
