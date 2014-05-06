@@ -17,8 +17,45 @@ $(function () {
         GenerateServer();
     });
 
+    $("#share").click(function (ev) {
+        $.ajax({
+            type: "POST",
+            url: "/share",
+            data: JSON.stringify({ source: bunEditor.getValue() }),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                if (res.url) {
+                    location.hash = res.url;
+                } else {
+                    console.log("error");
+                }
+            },
+            error: function () {
+                console.log("error");
+            }
+        });
+    });
+
     Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer);
     Playground.CreateSampleSelector("#sample-selector", GetSample);
 
-    GenerateServer();
+    if (location.hash != "" && location.hash != null) {
+        var url = location.hash;
+        url = url.substring(1, url.length);
+        $.ajax({
+            type: "GET",
+            url: "/p/" + url,
+            success: function (res) {
+                bunEditor.setValue(res);
+                bunEditor.clearSelection();
+                GenerateServer();
+            },
+            error: function () {
+                console.log("error");
+            }
+        });
+    } else {
+        GenerateServer();
+    }
 });

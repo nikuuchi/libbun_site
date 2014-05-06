@@ -63,18 +63,21 @@ def compile():
 def share():
     if not hasattr(request, 'json'):
         return 'error'
+    if not 'source' in request.json:
+        return 'error'
 
-    file = tempfile.NamedTemporaryFile(mode='w', suffix='.bun', dir='./files')
+    file = tempfile.NamedTemporaryFile(mode='w', suffix='.bun', prefix='hwq', dir='./files')
     name = file.name
     file.close() #tempfile cannot use utf-8 in python 2.7, so need to reopen
 
+    dirs = name.split('/')
     createSourceFile(name, request.json["source"])
 
-    return json.dumps({'url': name})
+    return json.dumps({'url': dirs[-1][3:-4]}) #FIXME validation
 
-@app.post('/p/<filename>')
+@app.route('/p/<filename>')
 def getShareCode(filename):
-    return static_file('index.html', root=rootPath) #FIXME get file
+    return static_file("hwq{0}.bun".format(filename), root=rootPath + '/files') #FIXME get file
 
 @app.route('/samples/<filename>')
 def server_static(filename):
