@@ -17,11 +17,15 @@ $(() => {
     var $UrlDisplay = $("#url-display");
 
     function showUrlDisplay() {
-        $UrlDisplay.text("http://play.libbun.org/editor.html" + location.hash);
+        $UrlDisplay.show();
+        $UrlDisplay.val("http://play.libbun.org/editor.html" + location.hash);
+        $UrlDisplay.focus();
+        $UrlDisplay.select();
     }
 
     function hideUrlDisplay() {
-        $UrlDisplay.text("");
+        $UrlDisplay.val("");
+        $UrlDisplay.hide();
     }
 
     bunEditor.on('change', (cm, obj) => {

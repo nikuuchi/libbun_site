@@ -35,7 +35,8 @@ html(lang='en')
         a.btn.btn-primary#compile(href='#', role='button') Compile
         | &nbsp;
         a.btn.btn-default#share(href='#', role='button') Share
-        span#url-display
+        | &nbsp;
+        input.form-control#url-display(type='text', readonly="readonly", style="display: none; cursor:default;", size='38')
     .row
       #bun-editor
         | export function main() {
