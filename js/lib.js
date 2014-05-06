@@ -43,7 +43,7 @@ var Playground;
     }
     Playground.CreateSampleSelector = CreateSampleSelector;
 
-    function CreateTargetChanger(query, editor, viewer, generate) {
+    function CreateTargetChanger(query, editor, viewer) {
         var $element = $(query);
         jQuery.each(Playground.TargetList, function (key, val) {
             $element.append($('<option>').attr({ value: key }).text(val.display));
@@ -52,7 +52,6 @@ var Playground;
             var target = Playground.TargetList[$(query + " option:selected").val()];
             ChangeSyntaxHighlight(viewer, target.mode);
             Playground.CodeGenTarget = target.option;
-            generate();
         });
     }
     Playground.CreateTargetChanger = CreateTargetChanger;

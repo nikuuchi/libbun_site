@@ -36,11 +36,15 @@ html(lang='en')
             a(href='#') Download Libbun
         .col-md-6.col-xs-6.col-sm-6.col-lg-6
           h3 Try Libbun
-          .row
-            select#sample-selector
-            select#generator-selector
-            a.pull-right(href='editor.html', style='font-size: 18px') fullscreen&nbsp;
-              span.glyphicon.glyphicon-resize-full
+          .row(style='padding-bottom: 3px;')
+            .form-inline
+              select.form-control#sample-selector
+              | &nbsp;
+              select.form-control#generator-selector
+              | &nbsp;
+              a.btn.btn-primary#compile(href='#', role='button') Compile
+              a.btn.btn-default.pull-right(href='editor.html') Fullscreen&nbsp;
+                span.glyphicon.glyphicon-resize-full
           .row
             #bun-editor
               | // You can edit this code!

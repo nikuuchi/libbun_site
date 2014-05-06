@@ -12,17 +12,11 @@ $(function () {
     var GetSample = Playground.GetSampleFunction(bunEditor);
     var GenerateServer = Playground.GetGenerateFunction(bunEditor, outputViewer);
 
-    //FIXME use button
-    var timer = null;
-    bunEditor.on("change", function (cm, obj) {
-        if (timer) {
-            clearTimeout(timer);
-            timer = null;
-        }
-        timer = setTimeout(GenerateServer, 400);
+    $("#compile").click(function (ev) {
+        GenerateServer();
     });
 
-    Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer, GenerateServer);
+    Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer);
     Playground.CreateSampleSelector("#sample-selector", GetSample);
 
     GenerateServer();

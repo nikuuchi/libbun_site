@@ -47,7 +47,7 @@ module Playground {
         });
     }
 
-    export function CreateTargetChanger(query: string, editor: any, viewer: any, generate: ()=>void): void {
+    export function CreateTargetChanger(query: string, editor: any, viewer: any): void {
         var $element = $(query);
         jQuery.each(TargetList, (key, val) => {
             $element.append($('<option>').attr({ value: key }).text(val.display));
@@ -56,7 +56,6 @@ module Playground {
             var target = TargetList[$(query + " option:selected").val()];
             ChangeSyntaxHighlight(viewer, target.mode);
             CodeGenTarget = target.option;
-            generate();
         });
     }
 

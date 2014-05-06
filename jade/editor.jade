@@ -24,15 +24,21 @@ html(lang='en')
       }
   body
     h1 Libbun Playground
-    select#sample-selector
-    select#generator-selector
-    #bun-editor
-      | export function main() {
-      | &#9;assert(true);
-      | &#9;println("#Hello,world");
-      | }
-    #output-viewer
-      | //Output
+    .row(style='padding-bottom: 3px;')
+      .form-inline
+        select.form-control#sample-selector
+        | &nbsp;
+        select.form-control#generator-selector
+        | &nbsp;
+        a.btn.btn-primary#compile(href='#', role='button') Compile
+    .row
+      #bun-editor
+        | export function main() {
+        | &#9;assert(true);
+        | &#9;println("#Hello,world");
+        | }
+      #output-viewer
+        | //Output
     .script
       +js('js/jquery.js')
       +js('js/bootstrap.min.js')
