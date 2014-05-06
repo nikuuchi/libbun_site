@@ -1,6 +1,6 @@
 var Playground;
 (function (Playground) {
-    Playground.CodeGenTarget = "js";
+    Playground.CodeGenTarget = "bun";
 
     function CreateEditor(query, options) {
         var editor = ace.edit(query);
@@ -30,10 +30,14 @@ var Playground;
     }
     Playground.ChangeSyntaxHighlight = ChangeSyntaxHighlight;
 
-    function CreateSampleSelector(query, generator) {
+    function CreateSampleSelector(query, getSample) {
         var $element = $(query);
-        var SampleList;
-        $element.append();
+        for (var i = 0; i < Playground.SampleList.length; i++) {
+            $element.append('<option value="' + Playground.SampleList[i] + '">' + Playground.SampleList[i] + '</option>');
+        }
+        $element.change(function (e) {
+            getSample($(query + " option:selected").val());
+        });
     }
     Playground.CreateSampleSelector = CreateSampleSelector;
 })(Playground || (Playground = {}));

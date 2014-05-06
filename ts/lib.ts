@@ -8,7 +8,7 @@ interface PlayOptions {
 }
 
 module Playground {
-    export var CodeGenTarget = "js";
+    export var CodeGenTarget = "bun";
 
     export function CreateEditor(query: string, options: PlayOptions): any {
         var editor = ace.edit(query);
@@ -36,9 +36,13 @@ module Playground {
         editor.getSession().setMode("ace/mode/" + targetMode);
     }
 
-    export function CreateSampleSelector(query: string, generator: ()=>void): void {
+    export function CreateSampleSelector(query: string, getSample: (val: string)=>void): void {
         var $element = $(query);
-        var SampleList
-        $element.append()
+        for(var i = 0; i < SampleList.length; i++) {
+            $element.append('<option value="'+SampleList[i]+'">'+ SampleList[i]+'</option>');
+        }
+        $element.change((e:Event) => {
+            getSample($(query + " option:selected").val());
+        });
     }
 }

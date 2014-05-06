@@ -79,18 +79,7 @@ $(() => {
         bind(i);
     }
 
-    var Samples = Playground.SampleList;
-
-    var sample_bind = (n) => {
-        $('#sample-'+Samples[n]).click(function(){
-            GetSample(Samples[n]);
-        });
-    };
-
-    for(var i = 0; i < Samples.length; i++){
-        $("#bun-sample").append('<li id="sample-'+Samples[i]+'-li"><a href="#" id="sample-'+Samples[i]+'">'+Samples[i]+'</a></li>');
-        sample_bind(i);
-    }
+    Playground.CreateSampleSelector("#sample-selector", GetSample);
 
     $("#Target-JavaScript-li").addClass("active");
     GenerateServer();
