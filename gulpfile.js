@@ -4,10 +4,10 @@ var gtypescript = require('gulp-tsc');
 var gjade = require('gulp-jade');
 
 gulp.task('default', function(){
-    gulp.src(['index.ts'])
+    gulp.src(['ts/*'])
         .pipe(gtypescript())
-        .pipe(gulp.dest("."));
-    gulp.src(['jade/index.jade'])
+        .pipe(gulp.dest("js/"));
+    gulp.src(['jade/index.jade', 'jade/editor.jade'])
         .pipe(gjade())
         .pipe(gulp.dest("."));
 });

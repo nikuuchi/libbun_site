@@ -1,4 +1,4 @@
-///<reference path='./typings/jquery/jquery.d.ts' />
+///<reference path='../typings/jquery/jquery.d.ts' />
 declare var ace: any;
 
 module Playground {
@@ -22,10 +22,12 @@ var Debug: any = {};
 $(() => {
     var bunEditor = Playground.CreateEditor("bun-editor");
     Debug.bunEditor = bunEditor;
+    bunEditor.renderer.setShowGutter(false);
     Playground.ChangeSyntaxHighlight(bunEditor, "typescript");
     var outputViewer = Playground.CreateEditor("output-viewer");
     Debug.outputViewer = outputViewer;
     outputViewer.setReadOnly(true);
+    outputViewer.renderer.setShowGutter(false);
 
     var GetSample = (sampleName: string) => {
         $.ajax({
