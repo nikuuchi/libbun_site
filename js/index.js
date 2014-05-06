@@ -16,6 +16,26 @@ $(function () {
         GenerateServer();
     });
 
+    $("#fullscreen").click(function (ev) {
+        $.ajax({
+            type: "POST",
+            url: "/share",
+            data: JSON.stringify({ source: bunEditor.getValue() }),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                if (res.url) {
+                    location.href = "/editor.html#" + res.url;
+                } else {
+                    console.log("error");
+                }
+            },
+            error: function () {
+                console.log("error");
+            }
+        });
+    });
+
     Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer);
     Playground.CreateSampleSelector("#sample-selector", GetSample);
 

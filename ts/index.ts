@@ -13,8 +13,28 @@ $(() => {
     var GetSample = Playground.GetSampleFunction(bunEditor);
     var GenerateServer = Playground.GetGenerateFunction(bunEditor, outputViewer);
 
-    $("#compile").click((ev: Event)=>{
+    $("#compile").click((ev: Event) => {
         GenerateServer();
+    });
+
+    $("#fullscreen").click((ev: Event) => {
+        $.ajax({
+            type: "POST",
+            url: "/share",
+            data: JSON.stringify({source: bunEditor.getValue()}),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: (res) => {
+                if(res.url) {
+                    location.href = "/editor.html#" + res.url;
+                } else {
+                    console.log("error");
+                }
+            },
+            error:() => {
+                  console.log("error");
+            }
+        });
     });
 
     Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer);
