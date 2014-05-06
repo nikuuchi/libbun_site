@@ -10,7 +10,7 @@ import json
 import platform
 import tempfile
 
-from bottle import Bottle, run, request, static_file
+from bottle import Bottle, run, request, static_file, BaseRequest
 
 def createResponseJson(source, result, error):
     return json.dumps({'source': source, 'result': result, 'error': error})
@@ -30,6 +30,7 @@ def readCompiledFile(name):
     return ''
 
 #Server settings
+BaseRequest.MEMFILE_MAX = 1024 * 1024 * 10 #TODO measure
 app = Bottle()
 rootPath = os.path.abspath(os.path.dirname(__file__))
 
@@ -40,19 +41,34 @@ def indexfile():
 
 @app.post('/compile')
 def compile():
-    file = tempfile.NamedTemporaryFile(mode='w', suffix='.zen', prefix='tmp', dir='/tmp')
+    if not hasattr(request, 'json'):
+        return 'error'
+
+    file = tempfile.NamedTemporaryFile(mode='w', suffix='.bun', prefix='tmp', dir='/tmp')
     name = file.name
     file.close() #tempfile cannot use utf-8 in python 2.7, so need to reopen
 
+    createSourceFile(name, request.json["source"])
+    message = compileCommand(name, request.json["target"], request.json["parser"])
+
+    return createResponseJson(message, '', message)
+
+@app.post('/share')
+def share():
     if not hasattr(request, 'json'):
         return 'error'
-    req = request.json
 
-    createSourceFile(name, req["source"])
-    message = compileCommand(name, req["target"], req["parser"])
+    file = tempfile.NamedTemporaryFile(mode='w', suffix='.bun', dir='./files')
+    name = file.name
+    file.close() #tempfile cannot use utf-8 in python 2.7, so need to reopen
 
-    #filecontent = readCompiledFile(name)
-    return createResponseJson(message, '', message)
+    createSourceFile(name, request.json["source"])
+
+    return json.dumps({'url': name})
+
+@app.route('/p/<filename>')
+def getShareCode(filename):
+    return static_file('index.html', root=rootPath) #FIXME get file
 
 @app.route('/samples/<filename>')
 def server_static(filename):
