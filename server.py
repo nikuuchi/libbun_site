@@ -47,6 +47,8 @@ def indexfile():
 def compile():
     if not hasattr(request, 'json'):
         return 'error'
+    if not ('source' in request.json and 'target' in request.json):
+        return 'error'
 
     file = tempfile.NamedTemporaryFile(mode='w', suffix='.bun', prefix='tmp', dir='/tmp')
     name = file.name
@@ -70,7 +72,7 @@ def share():
 
     return json.dumps({'url': name})
 
-@app.route('/p/<filename>')
+@app.post('/p/<filename>')
 def getShareCode(filename):
     return static_file('index.html', root=rootPath) #FIXME get file
 
