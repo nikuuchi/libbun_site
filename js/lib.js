@@ -64,6 +64,7 @@ var Playground;
                 success: function (res) {
                     editor.setValue(res);
                     editor.clearSelection();
+                    editor.gotoLine(0);
                 },
                 error: function () {
                     console.log("error");
@@ -84,6 +85,7 @@ var Playground;
                 success: function (res) {
                     viewer.setValue(res.source);
                     viewer.clearSelection();
+                    viewer.gotoLine(0);
                 },
                 error: function () {
                     console.log("error");

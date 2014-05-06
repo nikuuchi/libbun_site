@@ -67,6 +67,7 @@ module Playground {
                 success: (res) => {
                     editor.setValue(res);
                     editor.clearSelection();
+                    editor.gotoLine(0);
                 },
                 error:() => {
                       console.log("error");
@@ -86,6 +87,7 @@ module Playground {
                 success: (res) => {
                     viewer.setValue(res.source);
                     viewer.clearSelection();
+                    viewer.gotoLine(0);
                 },
                 error: () => {
                     console.log("error");
