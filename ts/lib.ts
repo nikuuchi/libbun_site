@@ -61,9 +61,10 @@ module Playground {
 
     export function GetSampleFunction(editor: any): (sampleName: string) => void {
         return (sampleName: string) => {
+            var name = sampleName.replace(" - ", "_");
             $.ajax({
                 type: "GET",
-                url: "/samples/"+sampleName+".bun",
+                url: "/samples/" + name + ".bun",
                 success: (res) => {
                     editor.setValue(res);
                     editor.clearSelection();

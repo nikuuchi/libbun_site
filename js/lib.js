@@ -58,9 +58,10 @@ var Playground;
 
     function GetSampleFunction(editor) {
         return function (sampleName) {
+            var name = sampleName.replace(" - ", "_");
             $.ajax({
                 type: "GET",
-                url: "/samples/" + sampleName + ".bun",
+                url: "/samples/" + name + ".bun",
                 success: function (res) {
                     editor.setValue(res);
                     editor.clearSelection();
