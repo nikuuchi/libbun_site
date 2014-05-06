@@ -22,9 +22,9 @@ var Playground;
 var Debug = {};
 
 $(function () {
-    var zenEditor = Playground.CreateEditor("zen-editor");
-    Debug.zenEditor = zenEditor;
-    Playground.ChangeSyntaxHighlight(zenEditor, "typescript");
+    var bunEditor = Playground.CreateEditor("bun-editor");
+    Debug.bunEditor = bunEditor;
+    Playground.ChangeSyntaxHighlight(bunEditor, "typescript");
     var outputViewer = Playground.CreateEditor("output-viewer");
     Debug.outputViewer = outputViewer;
     outputViewer.setReadOnly(true);
@@ -34,8 +34,8 @@ $(function () {
             type: "GET",
             url: "/samples/" + sampleName + ".bun",
             success: function (res) {
-                zenEditor.setValue(res);
-                zenEditor.clearSelection();
+                bunEditor.setValue(res);
+                bunEditor.clearSelection();
             },
             error: function () {
                 console.log("error");
@@ -47,7 +47,7 @@ $(function () {
         $.ajax({
             type: "POST",
             url: "/compile",
-            data: JSON.stringify({ source: zenEditor.getValue(), target: Playground.CodeGenTarget, parser: Playground.ParserTarget }),
+            data: JSON.stringify({ source: bunEditor.getValue(), target: Playground.CodeGenTarget, parser: Playground.ParserTarget }),
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             success: function (res) {
@@ -61,7 +61,7 @@ $(function () {
     };
 
     var timer = null;
-    zenEditor.on("change", function (cm, obj) {
+    bunEditor.on("change", function (cm, obj) {
         if (timer) {
             clearTimeout(timer);
             timer = null;
@@ -108,7 +108,7 @@ $(function () {
     };
 
     for (var i = 0; i < Samples.length; i++) {
-        $("#zen-sample").append('<li id="sample-' + Samples[i] + '-li"><a href="#" id="sample-' + Samples[i] + '">' + Samples[i] + '</a></li>');
+        $("#bun-sample").append('<li id="sample-' + Samples[i] + '-li"><a href="#" id="sample-' + Samples[i] + '">' + Samples[i] + '</a></li>');
         sample_bind(i);
     }
 
@@ -118,7 +118,7 @@ $(function () {
             Playground.ParserTarget = ParserOptions[n];
             $('#parse-lang').text(ParserNames[n]);
             $('#parse-lang').append('<b class="caret"></b>');
-            Playground.ChangeSyntaxHighlight(zenEditor, ParserMode[n]);
+            Playground.ChangeSyntaxHighlight(bunEditor, ParserMode[n]);
             if (timer) {
                 clearTimeout(timer);
                 timer = null;

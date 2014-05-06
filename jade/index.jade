@@ -9,14 +9,18 @@ html(lang='en')
     +css('css/styles.css')
     style(type='text/css', media='screen').
       #bun-editor {
-        height: 600px;
+        height: 200px;
         border: 1px solid black;
-        border-radius: 3px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
       }
       #output-viewer {
-        height: 600px;
-        border: 1px solid black;
-        border-radius: 3px;
+        height: 100px;
+        border-bottom: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
       }
   body
     nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
@@ -32,6 +36,13 @@ html(lang='en')
             a(href='#') Download Libbun
         .col-md-6.col-xs-6.col-sm-6.col-lg-6
           h3 Try Libbun
+          #bun-editor
+            | function foo&lpar;n: int&rpar; &lcub;
+            | &#9;var x &equals; &quot;hello, world&quot;&semi;
+            | &#9;return x&semi;
+            | &rcub;
+          #output-viewer
+          br
       .row
         .col-md-6.col-xs-6.col-sm-6.col-lg-6
           h3 Featured
@@ -39,3 +50,8 @@ html(lang='en')
           h3 Featured
     a(href="https://github.com/libbun")
       img(style="position: absolute; top: 0; right: 0; border: 0; z-index: 1031;", src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67", alt="Fork me on GitHub", data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png")
+    .script
+      +js('js/jquery.js')
+      +js('js/bootstrap.min.js')
+      +js('js/ace/ace.js')
+      +js('index.js')

@@ -20,9 +20,9 @@ module Playground {
 var Debug: any = {};
 
 $(() => {
-    var zenEditor = Playground.CreateEditor("zen-editor");
-    Debug.zenEditor = zenEditor;
-    Playground.ChangeSyntaxHighlight(zenEditor, "typescript");
+    var bunEditor = Playground.CreateEditor("bun-editor");
+    Debug.bunEditor = bunEditor;
+    Playground.ChangeSyntaxHighlight(bunEditor, "typescript");
     var outputViewer = Playground.CreateEditor("output-viewer");
     Debug.outputViewer = outputViewer;
     outputViewer.setReadOnly(true);
@@ -32,8 +32,8 @@ $(() => {
             type: "GET",
             url: "/samples/"+sampleName+".bun",
             success: (res) => {
-                zenEditor.setValue(res);
-                zenEditor.clearSelection();
+                bunEditor.setValue(res);
+                bunEditor.clearSelection();
             },
             error:() => {
                   console.log("error");
@@ -45,7 +45,7 @@ $(() => {
         $.ajax({
             type: "POST",
             url: "/compile",
-            data: JSON.stringify({source: zenEditor.getValue(), target: Playground.CodeGenTarget, parser: Playground.ParserTarget}),
+            data: JSON.stringify({source: bunEditor.getValue(), target: Playground.CodeGenTarget, parser: Playground.ParserTarget}),
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             success: (res) => {
@@ -59,7 +59,7 @@ $(() => {
     };
 
     var timer: number = null;
-    zenEditor.on("change", function(cm, obj) {
+    bunEditor.on("change", function(cm, obj) {
         if(timer){
             clearTimeout(timer);
             timer = null;
@@ -106,7 +106,7 @@ $(() => {
     };
 
     for(var i = 0; i < Samples.length; i++){
-        $("#zen-sample").append('<li id="sample-'+Samples[i]+'-li"><a href="#" id="sample-'+Samples[i]+'">'+Samples[i]+'</a></li>');
+        $("#bun-sample").append('<li id="sample-'+Samples[i]+'-li"><a href="#" id="sample-'+Samples[i]+'">'+Samples[i]+'</a></li>');
         sample_bind(i);
     }
 
@@ -116,7 +116,7 @@ $(() => {
             Playground.ParserTarget = ParserOptions[n];
             $('#parse-lang').text(ParserNames[n]);
             $('#parse-lang').append('<b class="caret"></b>');
-            Playground.ChangeSyntaxHighlight(zenEditor, ParserMode[n]);
+            Playground.ChangeSyntaxHighlight(bunEditor, ParserMode[n]);
             if(timer){
                 clearTimeout(timer);
                 timer = null;
