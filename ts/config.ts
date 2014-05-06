@@ -1,5 +1,5 @@
 module Playground {
-    export var SampleList = ["HelloWorld","BinaryTrees", "Fibonacci", "NGram"];
+    export var SampleList = ["HelloWorld","BinaryTrees", "Fibonacci", "FizzBuzz"];
 
     export var TargetList = {
         bun:  { display: "Bun",        option: "bun",                   mode: "typescript"},

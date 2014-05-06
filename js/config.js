@@ -1,6 +1,6 @@
 var Playground;
 (function (Playground) {
-    Playground.SampleList = ["HelloWorld", "BinaryTrees", "Fibonacci", "NGram"];
+    Playground.SampleList = ["HelloWorld", "BinaryTrees", "Fibonacci", "FizzBuzz"];
 
     Playground.TargetList = {
         bun: { display: "Bun", option: "bun", mode: "typescript" },
