@@ -1,3 +1,4 @@
+///<reference path='./config.ts' />
 declare var ace: any;
 
 interface PlayOptions {
@@ -39,10 +40,23 @@ module Playground {
     export function CreateSampleSelector(query: string, getSample: (val: string)=>void): void {
         var $element = $(query);
         for(var i = 0; i < SampleList.length; i++) {
-            $element.append('<option value="'+SampleList[i]+'">'+ SampleList[i]+'</option>');
+            $element.append($('<option>').attr({ value: SampleList[i] }).text(SampleList[i]));
         }
         $element.change((e:Event) => {
             getSample($(query + " option:selected").val());
+        });
+    }
+
+    export function CreateTargetChanger(query: string, editor: any, generate: ()=>void): void {
+        var $element = $(query);
+        jQuery.each(TargetList, (key, val) => {
+            $element.append($('<option>').attr({ value: key }).text(val.display));
+        });
+        $element.change((e:Event) => {
+            var target = TargetList[$(query + " option:selected").val()];
+            ChangeSyntaxHighlight(editor, target.mode);
+            CodeGenTarget = target.option;
+            generate();
         });
     }
 }

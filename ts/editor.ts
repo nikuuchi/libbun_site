@@ -10,8 +10,6 @@ $(() => {
 
     Debug.bunEditor = bunEditor;
     Debug.outputViewer = outputViewer;
-    outputViewer.setReadOnly(true);
-    outputViewer.getSession().setUseWorker(false);
 
     var GetSample = (sampleName: string) => {
         $.ajax({
@@ -44,6 +42,7 @@ $(() => {
         });
     };
 
+    //FIXME use button
     var timer: number = null;
     bunEditor.on("change", function(cm, obj) {
         if(timer){
@@ -53,31 +52,7 @@ $(() => {
         timer = setTimeout(GenerateServer, 400);
     });
 
-    var TargetNames   = ["C",     "CommonLisp", "C Sharp",     "Java", "JavaScript", "LLVM",         "Python", "R"];
-    var TargetOptions = ["c",     "cl",         "cs",     "java", "js",         "ll",           "py",     "r"];
-    var TargetMode    = ["c_cpp", "lisp",       "csharp", "java", "javascript", "assembly_x86", "python", "r"];
-
-    var bind = (n) => {
-        var Target = $('#Target-' + TargetNames[n]);
-        Target.click(function(){
-            Playground.CodeGenTarget = TargetOptions[n];
-            $('li.active').removeClass("active");
-            Target.parent().addClass("active");
-            $('#active-lang').text(TargetNames[n]); 
-            $('#active-lang').append('<b class="caret"></b>'); 
-            Playground.ChangeSyntaxHighlight(outputViewer, TargetMode[n]);
-            if(timer){
-                clearTimeout(timer);
-                timer = null;
-            }
-            GenerateServer();
-        });
-    };
-
-    for(var i = 0; i < TargetNames.length; i++){
-        $("#Targets").append('<li id="Target-'+TargetNames[i]+'-li"><a href="#" id="Target-'+TargetNames[i]+'">'+TargetNames[i]+'</a></li>');
-        bind(i);
-    }
+    Playground.CreateTargetChanger("#generator-selector", bunEditor, GenerateServer);
 
     Playground.CreateSampleSelector("#sample-selector", GetSample);
 

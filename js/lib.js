@@ -1,3 +1,5 @@
+///<reference path='./config.ts' />
+
 var Playground;
 (function (Playground) {
     Playground.CodeGenTarget = "bun";
@@ -33,11 +35,25 @@ var Playground;
     function CreateSampleSelector(query, getSample) {
         var $element = $(query);
         for (var i = 0; i < Playground.SampleList.length; i++) {
-            $element.append('<option value="' + Playground.SampleList[i] + '">' + Playground.SampleList[i] + '</option>');
+            $element.append($('<option>').attr({ value: Playground.SampleList[i] }).text(Playground.SampleList[i]));
         }
         $element.change(function (e) {
             getSample($(query + " option:selected").val());
         });
     }
     Playground.CreateSampleSelector = CreateSampleSelector;
+
+    function CreateTargetChanger(query, editor, generate) {
+        var $element = $(query);
+        jQuery.each(Playground.TargetList, function (key, val) {
+            $element.append($('<option>').attr({ value: key }).text(val.display));
+        });
+        $element.change(function (e) {
+            var target = Playground.TargetList[$(query + " option:selected").val()];
+            ChangeSyntaxHighlight(editor, target.mode);
+            Playground.CodeGenTarget = target.option;
+            generate();
+        });
+    }
+    Playground.CreateTargetChanger = CreateTargetChanger;
 })(Playground || (Playground = {}));
