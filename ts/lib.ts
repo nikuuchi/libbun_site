@@ -47,16 +47,51 @@ module Playground {
         });
     }
 
-    export function CreateTargetChanger(query: string, editor: any, generate: ()=>void): void {
+    export function CreateTargetChanger(query: string, editor: any, viewer: any, generate: ()=>void): void {
         var $element = $(query);
         jQuery.each(TargetList, (key, val) => {
             $element.append($('<option>').attr({ value: key }).text(val.display));
         });
         $element.change((e:Event) => {
             var target = TargetList[$(query + " option:selected").val()];
-            ChangeSyntaxHighlight(editor, target.mode);
+            ChangeSyntaxHighlight(viewer, target.mode);
             CodeGenTarget = target.option;
             generate();
         });
+    }
+
+    export function GetSampleFunction(editor: any): (sampleName: string) => void {
+        return (sampleName: string) => {
+            $.ajax({
+                type: "GET",
+                url: "/samples/"+sampleName+".bun",
+                success: (res) => {
+                    editor.setValue(res);
+                    editor.clearSelection();
+                },
+                error:() => {
+                      console.log("error");
+                }
+            });
+        };
+    }
+
+    export function GetGenerateFunction(editor: any, viewer: any): () => void {
+        return () => {
+            $.ajax({
+                type: "POST",
+                url: "/compile",
+                data: JSON.stringify({source: editor.getValue(), target: CodeGenTarget}),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: (res) => {
+                    viewer.setValue(res.source);
+                    viewer.clearSelection();
+                },
+                error: () => {
+                    console.log("error");
+                }
+            });
+        };
     }
 }

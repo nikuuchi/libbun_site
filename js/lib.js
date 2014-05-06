@@ -43,17 +43,54 @@ var Playground;
     }
     Playground.CreateSampleSelector = CreateSampleSelector;
 
-    function CreateTargetChanger(query, editor, generate) {
+    function CreateTargetChanger(query, editor, viewer, generate) {
         var $element = $(query);
         jQuery.each(Playground.TargetList, function (key, val) {
             $element.append($('<option>').attr({ value: key }).text(val.display));
         });
         $element.change(function (e) {
             var target = Playground.TargetList[$(query + " option:selected").val()];
-            ChangeSyntaxHighlight(editor, target.mode);
+            ChangeSyntaxHighlight(viewer, target.mode);
             Playground.CodeGenTarget = target.option;
             generate();
         });
     }
     Playground.CreateTargetChanger = CreateTargetChanger;
+
+    function GetSampleFunction(editor) {
+        return function (sampleName) {
+            $.ajax({
+                type: "GET",
+                url: "/samples/" + sampleName + ".bun",
+                success: function (res) {
+                    editor.setValue(res);
+                    editor.clearSelection();
+                },
+                error: function () {
+                    console.log("error");
+                }
+            });
+        };
+    }
+    Playground.GetSampleFunction = GetSampleFunction;
+
+    function GetGenerateFunction(editor, viewer) {
+        return function () {
+            $.ajax({
+                type: "POST",
+                url: "/compile",
+                data: JSON.stringify({ source: editor.getValue(), target: Playground.CodeGenTarget }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    viewer.setValue(res.source);
+                    viewer.clearSelection();
+                },
+                error: function () {
+                    console.log("error");
+                }
+            });
+        };
+    }
+    Playground.GetGenerateFunction = GetGenerateFunction;
 })(Playground || (Playground = {}));

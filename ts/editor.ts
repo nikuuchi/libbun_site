@@ -11,36 +11,8 @@ $(() => {
     Debug.bunEditor = bunEditor;
     Debug.outputViewer = outputViewer;
 
-    var GetSample = (sampleName: string) => {
-        $.ajax({
-            type: "GET",
-            url: "/samples/"+sampleName+".bun",
-            success: (res) => {
-                bunEditor.setValue(res);
-                bunEditor.clearSelection();
-            },
-            error:() => {
-                  console.log("error");
-            }
-        });
-    };
-
-    var GenerateServer = () => {
-        $.ajax({
-            type: "POST",
-            url: "/compile",
-            data: JSON.stringify({source: bunEditor.getValue(), target: Playground.CodeGenTarget}),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8",
-            success: (res) => {
-                outputViewer.setValue(res.source);
-                outputViewer.clearSelection();
-            },
-            error: () => {
-                console.log("error");
-            }
-        });
-    };
+    var GetSample = Playground.GetSampleFunction(bunEditor);
+    var GenerateServer = Playground.GetGenerateFunction(bunEditor, outputViewer);
 
     //FIXME use button
     var timer: number = null;
@@ -52,10 +24,8 @@ $(() => {
         timer = setTimeout(GenerateServer, 400);
     });
 
-    Playground.CreateTargetChanger("#generator-selector", bunEditor, GenerateServer);
-
+    Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer, GenerateServer);
     Playground.CreateSampleSelector("#sample-selector", GetSample);
 
-    $("#Target-JavaScript-li").addClass("active");
     GenerateServer();
 });
