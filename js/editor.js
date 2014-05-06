@@ -66,6 +66,7 @@ $(function () {
                 bunEditor.setValue(res);
                 bunEditor.clearSelection();
                 GenerateServer();
+                location.hash = url;
             },
             error: function () {
                 console.log("error");
