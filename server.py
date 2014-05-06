@@ -20,8 +20,8 @@ def createSourceFile(name, contents):
     f.write(contents)
     f.close()
 
-def compileCommand(name, target, parser):
-    return commands.getoutput('java -jar {0}/../libbun-0.1.jar -t {1} -p {2} {3}'.format(rootPath, target, parser, name))
+def compileCommand(name, target):
+    return commands.getoutput('java -jar {0}/../libbun-0.1.jar -t {1} {2}'.format(rootPath, target, name))
 
 def readCompiledFile(name):
     if os.path.exists(name):
@@ -39,6 +39,10 @@ rootPath = os.path.abspath(os.path.dirname(__file__))
 def indexfile():
     return static_file('index.html', root=rootPath)
 
+@app.get('/editor.html')
+def indexfile():
+    return static_file('editor.html', root=rootPath)
+
 @app.post('/compile')
 def compile():
     if not hasattr(request, 'json'):
@@ -49,7 +53,7 @@ def compile():
     file.close() #tempfile cannot use utf-8 in python 2.7, so need to reopen
 
     createSourceFile(name, request.json["source"])
-    message = compileCommand(name, request.json["target"], request.json["parser"])
+    message = compileCommand(name, request.json["target"])
 
     return createResponseJson(message, '', message)
 

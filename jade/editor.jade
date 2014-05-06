@@ -1,0 +1,38 @@
+include mixin
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title The Libbun Programming Language
+    +css('css/bootstrap.css')
+    +css('css/styles.css')
+    style(type='text/css', media='screen').
+      #bun-editor {
+        height: 350px;
+        border: 1px solid black;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+      }
+      #output-viewer {
+        height: 300px;
+        border-bottom: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+      }
+  body
+    h1 Libbun Playground
+    #bun-editor
+      | function foo&lpar;n: int&rpar; &lcub;
+      | &#9;var x &equals; &quot;hello, world&quot;&semi;
+      | &#9;return x&semi;
+      | &rcub;
+    #output-viewer
+    .script
+      +js('js/jquery.js')
+      +js('js/bootstrap.min.js')
+      +js('js/ace/ace.js')
+      +js('js/lib.js')
+      +js('js/editor.js')

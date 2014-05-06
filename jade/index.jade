@@ -36,7 +36,7 @@ html(lang='en')
             a(href='#') Download Libbun
         .col-md-6.col-xs-6.col-sm-6.col-lg-6
           h3 Try Libbun
-            a.pull-right(href='#' style='font-size: 18px') fullscreen&nbsp;
+            a.pull-right(href='editor.html' style='font-size: 18px') fullscreen&nbsp;
               span.glyphicon.glyphicon-resize-full
           #bun-editor
             | // You can edit this code!
@@ -45,6 +45,7 @@ html(lang='en')
             | &#9;return x&semi;
             | &rcub;
           #output-viewer
+            | // Generated output
           br
       .row
         .col-md-6.col-xs-6.col-sm-6.col-lg-6
@@ -57,4 +58,6 @@ html(lang='en')
       +js('js/jquery.js')
       +js('js/bootstrap.min.js')
       +js('js/ace/ace.js')
-      +js('index.js')
+      +js('js/config.js')
+      +js('js/lib.js')
+      +js('js/index.js')

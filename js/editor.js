@@ -1,13 +1,16 @@
 ///<reference path='../typings/jquery/jquery.d.ts' />
+///<reference path='./config.ts' />
 ///<reference path='./lib.ts' />
 var Debug = {};
 
 $(function () {
-    var bunEditor = Playground.CreateEditor("bun-editor", { syntax: "typescript", checker: false, line: false });
-    var outputViewer = Playground.CreateEditor("output-viewer", { readOnly: true, checker: false, line: false });
+    var bunEditor = Playground.CreateEditor("bun-editor", { syntax: "typescript" });
+    var outputViewer = Playground.CreateEditor("output-viewer", { readOnly: true });
 
     Debug.bunEditor = bunEditor;
     Debug.outputViewer = outputViewer;
+    outputViewer.setReadOnly(true);
+    outputViewer.getSession().setUseWorker(false);
 
     var GetSample = function (sampleName) {
         $.ajax({
@@ -52,10 +55,6 @@ $(function () {
     var TargetNames = ["C", "CommonLisp", "C Sharp", "Java", "JavaScript", "LLVM", "Python", "R"];
     var TargetOptions = ["c", "cl", "cs", "java", "js", "ll", "py", "r"];
     var TargetMode = ["c_cpp", "lisp", "csharp", "java", "javascript", "assembly_x86", "python", "r"];
-
-    var ParserNames = ["Bun", "Python"];
-    var ParserOptions = ["syntax::bun", "syntax::python"];
-    var ParserMode = ["typescript", "python"];
 
     var bind = function (n) {
         var Target = $('#Target-' + TargetNames[n]);
