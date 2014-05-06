@@ -6,7 +6,7 @@
 
 Top of the libbun.org
 
-* popup.html(under construction)
+* editor.html
 
 Full screen playground
 
