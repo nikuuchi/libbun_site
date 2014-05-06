@@ -13,6 +13,21 @@ $(function () {
     var GetSample = Playground.GetSampleFunction(bunEditor);
     var GenerateServer = Playground.GetGenerateFunction(bunEditor, outputViewer);
 
+    var $UrlDisplay = $("#url-display");
+
+    function showUrlDisplay() {
+        $UrlDisplay.text("http://play.libbun.org/editor.html" + location.hash);
+    }
+
+    function hideUrlDisplay() {
+        $UrlDisplay.text("");
+    }
+
+    bunEditor.on('change', function (cm, obj) {
+        location.hash = '';
+        hideUrlDisplay();
+    });
+
     $("#compile").click(function (ev) {
         GenerateServer();
     });
@@ -27,6 +42,7 @@ $(function () {
             success: function (res) {
                 if (res.url) {
                     location.hash = res.url;
+                    showUrlDisplay();
                 } else {
                     console.log("error");
                 }
