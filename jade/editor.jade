@@ -23,8 +23,11 @@ html(lang='en')
         border-bottom-right-radius: 3px;
       }
   body
-    h1 Libbun Playground
-    .row(style='padding-bottom: 3px;')
+    nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
+      .container-fluid
+        .navbar-header
+          a.navbar-brand(href='/', style='color: #000;') The Libbun Playground
+    .row(style='padding-bottom: 3px; padding-top: 18px;')
       .form-inline
         | Sample:&nbsp;
         select.form-control#sample-selector
