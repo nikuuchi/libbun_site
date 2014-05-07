@@ -77,20 +77,6 @@ var Playground;
     }
     Playground.GetSampleFunction = GetSampleFunction;
 
-    function createAnnotations(error) {
-        //FIXME
-        return [
-            {
-                column: 6,
-                raw: "Missing semicolon.",
-                row: 0,
-                text: "Missing \";\" before statement",
-                type: "error"
-            }
-        ];
-    }
-    Playground.createAnnotations = createAnnotations;
-
     function GetGenerateFunction(editor, viewer) {
         return function () {
             $.ajax({
@@ -101,7 +87,7 @@ var Playground;
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
                     viewer.setValue(res.source);
-                    editor.getSession().setAnnotations(createAnnotations(res.error));
+                    editor.getSession().setAnnotations(ParseError(res.error));
                     viewer.clearSelection();
                     viewer.gotoLine(0);
                 },
@@ -112,4 +98,31 @@ var Playground;
         };
     }
     Playground.GetGenerateFunction = GetGenerateFunction;
+
+    function Scan(text, parrern) {
+        var toMatch = text;
+        var result = [];
+        var matchResult = null;
+        while (matchResult = toMatch.match(parrern)) {
+            toMatch = RegExp.rightContext;
+            result.push(matchResult);
+        }
+        return result;
+    }
+    Playground.Scan = Scan;
+
+    function ParseError(allErrorMessage) {
+        // (/tmp/tmp68dUG_.bun:5) [error] ) is expected
+        var scanResults = Scan(allErrorMessage, /bun:(\d+)\)\s+\[(.+?)\]\s+(.*)$/m);
+        return scanResults.map(function (it) {
+            return {
+                row: Number(it[1]) - 1,
+                type: it[2],
+                text: it[3],
+                raw: it[3],
+                column: 0
+            };
+        });
+    }
+    Playground.ParseError = ParseError;
 })(Playground || (Playground = {}));

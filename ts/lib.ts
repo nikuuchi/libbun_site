@@ -87,19 +87,6 @@ module Playground {
         };
     }
 
-    export function createAnnotations(error: string): ErrorAnnotation[] {
-        //FIXME
-        return [
-            {
-                column: 6,
-                raw: "Missing semicolon.",
-                row: 0,
-                text: "Missing \";\" before statement",
-                type: "error",
-            }
-        ];
-    }
-
     export function GetGenerateFunction(editor: any, viewer: any): () => void {
         return () => {
             $.ajax({
@@ -110,7 +97,7 @@ module Playground {
                 contentType: "application/json; charset=utf-8",
                 success: (res) => {
                     viewer.setValue(res.source);
-                    editor.getSession().setAnnotations(createAnnotations(res.error));
+                    editor.getSession().setAnnotations(ParseError(res.error));
                     viewer.clearSelection();
                     viewer.gotoLine(0);
                 },
@@ -121,24 +108,28 @@ module Playground {
         };
     }
 
-    export function Scan(text: string, parrern: RegExp) => string[][] {
+    export function Scan(text: string, parrern: RegExp): string[][] {
         var toMatch = text;
         var result: string[][] = [];
         var matchResult: string[] = null;
         while(matchResult = toMatch.match(parrern)){
-            toMatch = RegExp.rightContext;
+            toMatch = (<any>RegExp).rightContext;
             result.push(matchResult);
         }
-        return matchResult;
+        return result;
     }
 
-    export function ParseError(allErrorMessage: string){
+    export function ParseError(allErrorMessage: string): ErrorAnnotation[] {
         // (/tmp/tmp68dUG_.bun:5) [error] ) is expected
         var scanResults = Scan(allErrorMessage, /bun:(\d+)\)\s+\[(.+?)\]\s+(.*)$/m);
-        for(var i = 0; i < scanResults.length; ++i){
-            var line: string = scanResults[i][1];
-            var type: string = scanResults[i][2]; // error | warning
-            var message: string = scanResults[i][3]; // body of error message
-        }
+        return scanResults.map((it)=> {
+            return {
+                row:  Number(it[1]) - 1,
+                type: it[2], // error | warning
+                text: it[3], // body of error message
+                raw:  it[3], // body of error message
+                column: 0
+            };
+        });
     }
 }
