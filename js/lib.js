@@ -3,6 +3,7 @@
 var Playground;
 (function (Playground) {
     Playground.CodeGenTarget = "bun";
+    Playground.CodeGenTargetExt = "bun";
 
     function CreateEditor(query, options) {
         var editor = ace.edit(query);
@@ -52,6 +53,7 @@ var Playground;
             var target = Playground.TargetList[$(query + " option:selected").val()];
             ChangeSyntaxHighlight(viewer, target.mode);
             Playground.CodeGenTarget = target.option;
+            Playground.CodeGenTargetExt = target.ext;
         });
     }
     Playground.CreateTargetChanger = CreateTargetChanger;
@@ -80,7 +82,7 @@ var Playground;
             $.ajax({
                 type: "POST",
                 url: "/compile",
-                data: JSON.stringify({ source: editor.getValue(), target: Playground.CodeGenTarget }),
+                data: JSON.stringify({ source: editor.getValue(), target: Playground.CodeGenTarget, ext: Playground.CodeGenTargetExt }),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {

@@ -9,7 +9,8 @@ interface PlayOptions {
 }
 
 module Playground {
-    export var CodeGenTarget = "bun";
+    export var CodeGenTarget    = "bun";
+    export var CodeGenTargetExt = "bun";
 
     export function CreateEditor(query: string, options: PlayOptions): any {
         var editor = ace.edit(query);
@@ -56,6 +57,7 @@ module Playground {
             var target = TargetList[$(query + " option:selected").val()];
             ChangeSyntaxHighlight(viewer, target.mode);
             CodeGenTarget = target.option;
+            CodeGenTargetExt = target.ext;
         });
     }
 
@@ -82,7 +84,7 @@ module Playground {
             $.ajax({
                 type: "POST",
                 url: "/compile",
-                data: JSON.stringify({source: editor.getValue(), target: CodeGenTarget}),
+                data: JSON.stringify({source: editor.getValue(), target: CodeGenTarget, ext: CodeGenTargetExt}),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 success: (res) => {
