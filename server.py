@@ -21,7 +21,7 @@ def createSourceFile(name, contents):
     f.close()
 
 def compileCommand(name, target):
-    return commands.getoutput('java -jar {0}/../libbun-0.1.jar -t {1} {2}'.format(rootPath, target, name))
+    return commands.getoutput('java -jar {0}/../libbun-0.1.jar -t {1} -o {2} {3}'.format(rootPath, target, name[:-4], name))
 
 def readCompiledFile(name):
     if os.path.exists(name):
@@ -55,9 +55,14 @@ def compile():
     file.close() #tempfile cannot use utf-8 in python 2.7, so need to reopen
 
     createSourceFile(name, request.json["source"])
-    message = compileCommand(name, request.json["target"])
+    error_message = compileCommand(name, request.json["target"])
 
-    return createResponseJson(message, '', message)
+    readFileName = name[:-4] + "." + request.json["ext"]
+    message = readCompiledFile(readFileName)
+    print readFileName
+    print message
+
+    return createResponseJson(message, '', error_message)
 
 @app.post('/share')
 def share():

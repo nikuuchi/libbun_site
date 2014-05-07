@@ -4,7 +4,7 @@
 var Debug = {};
 
 $(function () {
-    var bunEditor = Playground.CreateEditor("bun-editor", { syntax: "typescript" });
+    var bunEditor = Playground.CreateEditor("bun-editor", { syntax: "typescript", checker: true });
     var outputViewer = Playground.CreateEditor("output-viewer", { readOnly: true });
 
     Debug.bunEditor = bunEditor;

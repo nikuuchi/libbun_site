@@ -3,6 +3,7 @@
 var Playground;
 (function (Playground) {
     Playground.CodeGenTarget = "bun";
+    Playground.CodeGenTargetExt = "bun";
 
     function CreateEditor(query, options) {
         var editor = ace.edit(query);
@@ -52,6 +53,7 @@ var Playground;
             var target = Playground.TargetList[$(query + " option:selected").val()];
             ChangeSyntaxHighlight(viewer, target.mode);
             Playground.CodeGenTarget = target.option;
+            Playground.CodeGenTargetExt = target.ext;
         });
     }
     Playground.CreateTargetChanger = CreateTargetChanger;
@@ -75,16 +77,31 @@ var Playground;
     }
     Playground.GetSampleFunction = GetSampleFunction;
 
+    function createAnnotations(error) {
+        //FIXME
+        return [
+            {
+                column: 6,
+                raw: "Missing semicolon.",
+                row: 0,
+                text: "Missing \";\" before statement",
+                type: "error"
+            }
+        ];
+    }
+    Playground.createAnnotations = createAnnotations;
+
     function GetGenerateFunction(editor, viewer) {
         return function () {
             $.ajax({
                 type: "POST",
                 url: "/compile",
-                data: JSON.stringify({ source: editor.getValue(), target: Playground.CodeGenTarget }),
+                data: JSON.stringify({ source: editor.getValue(), target: Playground.CodeGenTarget, ext: Playground.CodeGenTargetExt }),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
                     viewer.setValue(res.source);
+                    editor.getSession().setAnnotations(createAnnotations(res.error));
                     viewer.clearSelection();
                     viewer.gotoLine(0);
                 },

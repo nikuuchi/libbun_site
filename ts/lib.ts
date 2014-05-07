@@ -8,8 +8,17 @@ interface PlayOptions {
     checker?: boolean;
 }
 
+interface ErrorAnnotation {
+    column: number;
+    raw: string;
+    row: number;
+    text: string;
+    type: string;
+}
+
 module Playground {
-    export var CodeGenTarget = "bun";
+    export var CodeGenTarget    = "bun";
+    export var CodeGenTargetExt = "bun";
 
     export function CreateEditor(query: string, options: PlayOptions): any {
         var editor = ace.edit(query);
@@ -56,6 +65,7 @@ module Playground {
             var target = TargetList[$(query + " option:selected").val()];
             ChangeSyntaxHighlight(viewer, target.mode);
             CodeGenTarget = target.option;
+            CodeGenTargetExt = target.ext;
         });
     }
 
@@ -77,16 +87,30 @@ module Playground {
         };
     }
 
+    export function createAnnotations(error: string): ErrorAnnotation[] {
+        //FIXME
+        return [
+            {
+                column: 6,
+                raw: "Missing semicolon.",
+                row: 0,
+                text: "Missing \";\" before statement",
+                type: "error",
+            }
+        ];
+    }
+
     export function GetGenerateFunction(editor: any, viewer: any): () => void {
         return () => {
             $.ajax({
                 type: "POST",
                 url: "/compile",
-                data: JSON.stringify({source: editor.getValue(), target: CodeGenTarget}),
+                data: JSON.stringify({source: editor.getValue(), target: CodeGenTarget, ext: CodeGenTargetExt}),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 success: (res) => {
                     viewer.setValue(res.source);
+                    editor.getSession().setAnnotations(createAnnotations(res.error));
                     viewer.clearSelection();
                     viewer.gotoLine(0);
                 },
