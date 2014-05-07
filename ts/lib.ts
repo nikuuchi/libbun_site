@@ -96,4 +96,25 @@ module Playground {
             });
         };
     }
+
+    export function Scan(text: string, parrern: RegExp) => string[][] {
+        var toMatch = text;
+        var result: string[][] = [];
+        var matchResult: string[] = null;
+        while(matchResult = toMatch.match(parrern)){
+            toMatch = RegExp.rightContext;
+            result.push(matchResult);
+        }
+        return matchResult;
+    }
+
+    export function ParseError(allErrorMessage: string){
+        // (/tmp/tmp68dUG_.bun:5) [error] ) is expected
+        var scanResults = Scan(allErrorMessage, /bun:(\d+)\)\s+\[(.+?)\]\s+(.*)$/m);
+        for(var i = 0; i < scanResults.length; ++i){
+            var line: string = scanResults[i][1];
+            var type: string = scanResults[i][2]; // error | warning
+            var message: string = scanResults[i][3]; // body of error message
+        }
+    }
 }
