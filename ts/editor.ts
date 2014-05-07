@@ -18,7 +18,7 @@ $(() => {
 
     function showUrlDisplay() {
         $UrlDisplay.show();
-        $UrlDisplay.val("http://play.libbun.org/editor.html" + location.hash);
+        $UrlDisplay.val(location.protocol + "//" + location.host + "/editor.html" + location.hash);
         $UrlDisplay.focus();
         $UrlDisplay.select();
     }
