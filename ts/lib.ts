@@ -8,6 +8,14 @@ interface PlayOptions {
     checker?: boolean;
 }
 
+interface ErrorAnnotation {
+    column: number;
+    raw: string;
+    row: number;
+    text: string;
+    type: string;
+}
+
 module Playground {
     export var CodeGenTarget    = "bun";
     export var CodeGenTargetExt = "bun";
@@ -79,6 +87,19 @@ module Playground {
         };
     }
 
+    export function createAnnotations(error: string): ErrorAnnotation[] {
+        //FIXME
+        return [
+            {
+                column: 6,
+                raw: "Missing semicolon.",
+                row: 0,
+                text: "Missing \";\" before statement",
+                type: "error",
+            }
+        ];
+    }
+
     export function GetGenerateFunction(editor: any, viewer: any): () => void {
         return () => {
             $.ajax({
@@ -89,6 +110,7 @@ module Playground {
                 contentType: "application/json; charset=utf-8",
                 success: (res) => {
                     viewer.setValue(res.source);
+                    editor.getSession().setAnnotations(createAnnotations(res.error));
                     viewer.clearSelection();
                     viewer.gotoLine(0);
                 },

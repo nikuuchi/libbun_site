@@ -77,6 +77,20 @@ var Playground;
     }
     Playground.GetSampleFunction = GetSampleFunction;
 
+    function createAnnotations(error) {
+        //FIXME
+        return [
+            {
+                column: 6,
+                raw: "Missing semicolon.",
+                row: 0,
+                text: "Missing \";\" before statement",
+                type: "error"
+            }
+        ];
+    }
+    Playground.createAnnotations = createAnnotations;
+
     function GetGenerateFunction(editor, viewer) {
         return function () {
             $.ajax({
@@ -87,6 +101,7 @@ var Playground;
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
                     viewer.setValue(res.source);
+                    editor.getSession().setAnnotations(createAnnotations(res.error));
                     viewer.clearSelection();
                     viewer.gotoLine(0);
                 },
