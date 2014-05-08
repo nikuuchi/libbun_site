@@ -11,10 +11,10 @@ $(() => {
     Debug.outputViewer = outputViewer;
 
     var GetSample = Playground.GetSampleFunction(bunEditor);
-    var GenerateServer = Playground.GetGenerateFunction(bunEditor, outputViewer);
+    var GenerateCode = Playground.GetGenerateFunction(bunEditor, outputViewer);
 
     $("#compile").click((ev: Event) => {
-        GenerateServer();
+        GenerateCode();
     });
 
     $("#fullscreen").click((ev: Event) => {
@@ -37,8 +37,8 @@ $(() => {
         });
     });
 
-    Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer);
+    Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer, GenerateCode);
     Playground.CreateSampleSelector("#sample-selector", GetSample);
 
-    GenerateServer();
+    GenerateCode();
 });

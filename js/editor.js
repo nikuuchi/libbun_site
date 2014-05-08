@@ -11,7 +11,7 @@ $(function () {
     Debug.outputViewer = outputViewer;
 
     var GetSample = Playground.GetSampleFunction(bunEditor);
-    var GenerateServer = Playground.GetGenerateFunction(bunEditor, outputViewer);
+    var GenerateCode = Playground.GetGenerateFunction(bunEditor, outputViewer);
 
     var $UrlDisplay = $("#url-display");
 
@@ -33,7 +33,7 @@ $(function () {
     });
 
     $("#compile").click(function (ev) {
-        GenerateServer();
+        GenerateCode();
     });
 
     $("#share").click(function (ev) {
@@ -57,7 +57,7 @@ $(function () {
         });
     });
 
-    Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer);
+    Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer, GenerateCode);
     Playground.CreateSampleSelector("#sample-selector", GetSample);
 
     if (location.hash != "" && location.hash != null) {
@@ -69,7 +69,7 @@ $(function () {
             success: function (res) {
                 bunEditor.setValue(res);
                 bunEditor.clearSelection();
-                GenerateServer();
+                GenerateCode();
                 location.hash = url;
             },
             error: function () {
@@ -77,6 +77,6 @@ $(function () {
             }
         });
     } else {
-        GenerateServer();
+        GenerateCode();
     }
 });
