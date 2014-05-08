@@ -102,8 +102,10 @@ module Playground {
                     viewer.setValue(res.source);
                     var session = editor.getSession();
                     var errors = ParseError(res.error);
-                    session.setAnnotations(errors);
-                    SetHighlightLines(session, errors);
+                    if(session.getUseWorker()) {
+                        session.setAnnotations(errors);
+                        SetHighlightLines(session, errors);
+                    }
                     viewer.clearSelection();
                     viewer.gotoLine(0);
                 },

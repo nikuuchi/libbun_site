@@ -30,6 +30,7 @@ $(function () {
     bunEditor.on('change', function (cm, obj) {
         location.hash = '';
         hideUrlDisplay();
+        Playground.ClearHighlightLines(bunEditor.getSession());
     });
 
     $("#translate").click(function (ev) {

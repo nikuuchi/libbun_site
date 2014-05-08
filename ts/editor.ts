@@ -31,6 +31,7 @@ $(() => {
     bunEditor.on('change', (cm, obj) => {
         location.hash = '';
         hideUrlDisplay();
+        Playground.ClearHighlightLines(bunEditor.getSession());
     });
 
     $("#translate").click((ev: Event)=>{
