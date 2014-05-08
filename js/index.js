@@ -12,7 +12,7 @@ $(function () {
     var GetSample = Playground.GetSampleFunction(bunEditor);
     var GenerateCode = Playground.GetGenerateFunction(bunEditor, outputViewer);
 
-    $("#compile").click(function (ev) {
+    $("#translate").click(function (ev) {
         GenerateCode();
     });
 

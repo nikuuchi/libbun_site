@@ -5,6 +5,8 @@ var Playground;
     Playground.CodeGenTarget = "bun";
     Playground.CodeGenTargetExt = "bun";
 
+    Playground.ErrorLineMarkers = [];
+
     function CreateEditor(query, options) {
         var editor = ace.edit(query);
         editor.setTheme("ace/theme/xcode");
@@ -88,7 +90,10 @@ var Playground;
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
                     viewer.setValue(res.source);
-                    editor.getSession().setAnnotations(ParseError(res.error));
+                    var session = editor.getSession();
+                    var errors = ParseError(res.error);
+                    session.setAnnotations(errors);
+                    SetHighlightLines(session, errors);
                     viewer.clearSelection();
                     viewer.gotoLine(0);
                 },
@@ -99,6 +104,25 @@ var Playground;
         };
     }
     Playground.GetGenerateFunction = GetGenerateFunction;
+
+    function SetHighlightLines(session, errors) {
+        ClearHighlightLines(session);
+        for (var i = 0; i < errors.length; i++) {
+            console.log(errors[i]);
+            var range = session.highlightLines(errors[i].row, errors[i].row, "playground_error_line");
+            console.log(range);
+            Playground.ErrorLineMarkers.push(range);
+        }
+    }
+    Playground.SetHighlightLines = SetHighlightLines;
+
+    function ClearHighlightLines(session) {
+        for (var i = 0; i < Playground.ErrorLineMarkers.length; i++) {
+            session.removeMarker(Playground.ErrorLineMarkers[i].id);
+        }
+        Playground.ErrorLineMarkers = [];
+    }
+    Playground.ClearHighlightLines = ClearHighlightLines;
 
     function Scan(text, parrern) {
         var toMatch = text;

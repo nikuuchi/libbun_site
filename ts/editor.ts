@@ -33,7 +33,7 @@ $(() => {
         hideUrlDisplay();
     });
 
-    $("#compile").click((ev: Event)=>{
+    $("#translate").click((ev: Event)=>{
         GenerateCode();
     });
 

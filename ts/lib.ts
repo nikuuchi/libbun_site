@@ -20,6 +20,8 @@ module Playground {
     export var CodeGenTarget    = "bun";
     export var CodeGenTargetExt = "bun";
 
+    export var ErrorLineMarkers: any[] = [];
+
     export function CreateEditor(query: string, options: PlayOptions): any {
         var editor = ace.edit(query);
         editor.setTheme("ace/theme/xcode");
@@ -98,7 +100,10 @@ module Playground {
                 contentType: "application/json; charset=utf-8",
                 success: (res) => {
                     viewer.setValue(res.source);
-                    editor.getSession().setAnnotations(ParseError(res.error));
+                    var session = editor.getSession();
+                    var errors = ParseError(res.error);
+                    session.setAnnotations(errors);
+                    SetHighlightLines(session, errors);
                     viewer.clearSelection();
                     viewer.gotoLine(0);
                 },
@@ -107,6 +112,23 @@ module Playground {
                 }
             });
         };
+    }
+
+    export function SetHighlightLines(session: any, errors: ErrorAnnotation[]): void {
+        ClearHighlightLines(session);
+        for(var i = 0; i < errors.length; i++) {
+            console.log(errors[i]);
+            var range = session.highlightLines(errors[i].row, errors[i].row, "playground_error_line");
+            console.log(range);
+            ErrorLineMarkers.push(range);
+        }
+    }
+
+    export function ClearHighlightLines(session: any): void {
+        for(var i = 0; i < ErrorLineMarkers.length; i++) {
+            session.removeMarker(ErrorLineMarkers[i].id);
+        }
+        ErrorLineMarkers = [];
     }
 
     export function Scan(text: string, parrern: RegExp): string[][] {

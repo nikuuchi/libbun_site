@@ -32,7 +32,7 @@ $(function () {
         hideUrlDisplay();
     });
 
-    $("#compile").click(function (ev) {
+    $("#translate").click(function (ev) {
         GenerateCode();
     });
 
