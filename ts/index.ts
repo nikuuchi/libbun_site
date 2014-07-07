@@ -4,24 +4,29 @@
 var Debug: any = {};
 
 $(() => {
-    var bunEditor = Playground.CreateEditor("bun-editor", { syntax: "typescript", checker: false, line: false});
-    var outputViewer = Playground.CreateEditor("output-viewer", { readOnly: true, checker: false, line: false});
+    var component = new Playground.PlaygroundEditor({
+        query: "bun-editor",
+        syntax: "typescript",
+        checker: false,
+        line: false
+    }, {
+        query: "output-viewer",
+        readOnly: true,
+        checker: false,
+        line: false
+    })
 
-    Debug.bunEditor = bunEditor;
-    Debug.outputViewer = outputViewer;
-
-    var GetSample = Playground.GetSampleFunction(bunEditor);
-    var GenerateCode = Playground.GetGenerateFunction(bunEditor, outputViewer);
+    Debug.component = component;
 
     $("#translate").click((ev: Event) => {
-        GenerateCode();
+        component.getGeneratedCode();
     });
 
     $("#fullscreen").click((ev: Event) => {
         $.ajax({
             type: "POST",
             url: "/share",
-            data: JSON.stringify({source: bunEditor.getValue()}),
+            data: JSON.stringify({source: component.codeEditor.getValue()}),
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             success: (res) => {
@@ -37,8 +42,8 @@ $(() => {
         });
     });
 
-    Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer, GenerateCode);
-    Playground.CreateSampleSelector("#sample-selector", GetSample);
+    component.createTargetChanger("#generator-selector");
+    component.createSampleSelector("#sample-selector");
 
-    GenerateCode();
+    component.getGeneratedCode();
 });

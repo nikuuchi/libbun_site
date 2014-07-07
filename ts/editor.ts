@@ -5,14 +5,20 @@
 var Debug: any = {};
 
 $(() => {
-    var bunEditor = Playground.CreateEditor("bun-editor", { syntax: "typescript", checker: true });
-    var outputViewer = Playground.CreateEditor("output-viewer", { readOnly: true });
+    var component = new Playground.PlaygroundEditor({
+        query: "bun-editor",
+        syntax: "typescript",
+        checker: true
+    },{
+        query: "output-viewer",
+        readOnly: true
+    });
 
-    Debug.bunEditor = bunEditor;
-    Debug.outputViewer = outputViewer;
+    Debug.component = component;
 
-    var GetSample = Playground.GetSampleFunction(bunEditor);
-    var GenerateCode = Playground.GetGenerateFunction(bunEditor, outputViewer);
+    var bunEditor    = component.codeEditor;
+    var outputViewer = component.outputViewer;
+
 
     var $UrlDisplay = $("#url-display");
 
@@ -35,7 +41,7 @@ $(() => {
     });
 
     $("#translate").click((ev: Event)=>{
-        GenerateCode();
+        component.getGeneratedCode();
     });
 
     $("#share").click((ev: Event)=>{
@@ -59,8 +65,8 @@ $(() => {
         });
     });
 
-    Playground.CreateTargetChanger("#generator-selector", bunEditor, outputViewer, GenerateCode);
-    Playground.CreateSampleSelector("#sample-selector", GetSample);
+    component.createTargetChanger("#generator-selector");
+    component.createSampleSelector("#sample-selector");
 
     if(location.hash != "" && location.hash != null) {
         var url = location.hash;
@@ -71,7 +77,7 @@ $(() => {
             success: (res) => {
                 bunEditor.setValue(res);
                 bunEditor.clearSelection();
-                GenerateCode();
+                component.getGeneratedCode();
                 location.hash = url;
             },
             error:() => {
@@ -79,6 +85,6 @@ $(() => {
             }
         });
     } else {
-        GenerateCode();
+        component.getGeneratedCode();
     }
 });

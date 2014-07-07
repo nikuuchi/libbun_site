@@ -1,4 +1,5 @@
 ///<reference path='./config.ts' />
+///<reference path='./editor.ts' />
 declare var ace: any;
 
 interface PlayOptions {
@@ -23,14 +24,14 @@ module Playground {
     export var ErrorLineMarkers: any[] = [];
 
     export class PlaygroundEditor {
-        private codeEditor:       any; //ace
-        private outputViewer:     any; //ace
+        public  codeEditor:       any; //ace
+        public  outputViewer:     any; //ace
         private codeGenTarget:    string = "bun";
         private codeGenTargetExt: string = "bun";
 
         constructor(editorOptions: PlayOptions, outputOptions: PlayOptions) {
             this.codeEditor   = this.createEditor(editorOptions.query, editorOptions);
-            this.outputViewer = this.createEditor(outputViewer.query, outputOptions);
+            this.outputViewer = this.createEditor(outputOptions.query, outputOptions);
         }
 
         private createEditor(query: string, options: PlayOptions): any {
@@ -38,7 +39,7 @@ module Playground {
             editor.setTheme("ace/theme/xcode");
 
             var syntax = options.syntax != null ? options.syntax : "javascript";
-            this.ChangeSyntaxHighlight(editor, syntax);
+            this.changeSyntaxHighlight(editor, syntax);
 
             if(options.line == false) {
                 editor.renderer.setShowGutter(false);
@@ -88,49 +89,49 @@ module Playground {
             $.ajax({
                 type: "POST",
                 url: "/compile",
-                data: JSON.stringify({source: e.getValue(), target: CodeGenTarget, ext: CodeGenTargetExt}),
+                data: JSON.stringify({source: e.getValue(), target: this.codeGenTarget, ext: this.codeGenTargetExt}),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 success: (res) => {
-                    viewer.setValue(res.source);
-                    var session = editor.getSession();
+                    this.outputViewer.setValue(res.source);
+                    var session = this.codeEditor.getSession();
                     var errors = ParseError(res.error);
                     if(session.getUseWorker()) {
                         session.setAnnotations(errors);
                         SetHighlightLines(session, errors);
                     }
-                    viewer.clearSelection();
-                    viewer.gotoLine(0);
+                    this.outputViewer.clearSelection();
+                    this.outputViewer.gotoLine(0);
                 },
                 error: () => {
                     console.log("error");
                 }
             });
         }
-    }
 
-    export function CreateSampleSelector(query: string, getSample: (val: string)=>void): void {
-        var $element = $(query);
-        for(var i = 0; i < SampleList.length; i++) {
-            $element.append($('<option>').attr({ value: SampleList[i] }).text(SampleList[i]));
+        public createSampleSelector(query: string): void {
+            var $element = $(query);
+            for(var i = 0; i < SampleList.length; i++) {
+                $element.append($('<option>').attr({ value: SampleList[i] }).text(SampleList[i]));
+            }
+            $element.change((e:Event) => {
+                this.getSampleBody($(query + " option:selected").val());
+            });
         }
-        $element.change((e:Event) => {
-            getSample($(query + " option:selected").val());
-        });
-    }
 
-    export function CreateTargetChanger(query: string, editor: any, viewer: any, generate: ()=>void): void {
-        var $element = $(query);
-        jQuery.each(TargetList, (key, val) => {
-            $element.append($('<option>').attr({ value: key }).text(val.display));
-        });
-        $element.change((e:Event) => {
-            var target = TargetList[$(query + " option:selected").val()];
-            ChangeSyntaxHighlight(viewer, target.mode);
-            CodeGenTarget = target.option;
-            CodeGenTargetExt = target.ext;
-            generate();
-        });
+        public createTargetChanger(query: string): void {
+            var $element = $(query);
+            jQuery.each(TargetList, (key, val) => {
+                $element.append($('<option>').attr({ value: key }).text(val.display));
+            });
+            $element.change((e:Event) => {
+                var target = TargetList[$(query + " option:selected").val()];
+                this.changeSyntaxHighlight(this.outputViewer, target.mode);
+                this.codeGenTarget = target.option;
+                this.codeGenTargetExt = target.ext;
+                this.getGeneratedCode();
+            });
+        }
     }
 
     export function SetHighlightLines(session: any, errors: ErrorAnnotation[]): void {

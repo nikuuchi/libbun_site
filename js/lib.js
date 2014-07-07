@@ -1,111 +1,122 @@
 ///<reference path='./config.ts' />
+///<reference path='./editor.ts' />
 
 var Playground;
 (function (Playground) {
-    Playground.CodeGenTarget = "bun";
-    Playground.CodeGenTargetExt = "bun";
-
     Playground.ErrorLineMarkers = [];
 
-    function CreateEditor(query, options) {
-        var editor = ace.edit(query);
-        editor.setTheme("ace/theme/xcode");
-
-        var syntax = options.syntax != null ? options.syntax : "javascript";
-        this.ChangeSyntaxHighlight(editor, syntax);
-
-        if (options.line == false) {
-            editor.renderer.setShowGutter(false);
+    var PlaygroundEditor = (function () {
+        function PlaygroundEditor(editorOptions, outputOptions) {
+            this.codeGenTarget = "bun";
+            this.codeGenTargetExt = "bun";
+            this.codeEditor = this.createEditor(editorOptions.query, editorOptions);
+            this.outputViewer = this.createEditor(outputOptions.query, outputOptions);
         }
+        PlaygroundEditor.prototype.createEditor = function (query, options) {
+            var editor = ace.edit(query);
+            editor.setTheme("ace/theme/xcode");
 
-        if (!options.checker) {
-            editor.getSession().setUseWorker(false);
-        }
+            var syntax = options.syntax != null ? options.syntax : "javascript";
+            this.changeSyntaxHighlight(editor, syntax);
 
-        if (options.readOnly == true) {
-            editor.setReadOnly(true);
-        }
+            if (options.line == false) {
+                editor.renderer.setShowGutter(false);
+            }
 
-        return editor;
-    }
-    Playground.CreateEditor = CreateEditor;
+            if (!options.checker) {
+                editor.getSession().setUseWorker(false);
+            }
 
-    function ChangeSyntaxHighlight(editor, targetMode) {
-        editor.getSession().setMode("ace/mode/" + targetMode);
-    }
-    Playground.ChangeSyntaxHighlight = ChangeSyntaxHighlight;
+            if (options.readOnly == true) {
+                editor.setReadOnly(true);
+            }
 
-    function CreateSampleSelector(query, getSample) {
-        var $element = $(query);
-        for (var i = 0; i < Playground.SampleList.length; i++) {
-            $element.append($('<option>').attr({ value: Playground.SampleList[i] }).text(Playground.SampleList[i]));
-        }
-        $element.change(function (e) {
-            getSample($(query + " option:selected").val());
-        });
-    }
-    Playground.CreateSampleSelector = CreateSampleSelector;
+            return editor;
+        };
 
-    function CreateTargetChanger(query, editor, viewer, generate) {
-        var $element = $(query);
-        jQuery.each(Playground.TargetList, function (key, val) {
-            $element.append($('<option>').attr({ value: key }).text(val.display));
-        });
-        $element.change(function (e) {
-            var target = Playground.TargetList[$(query + " option:selected").val()];
-            ChangeSyntaxHighlight(viewer, target.mode);
-            Playground.CodeGenTarget = target.option;
-            Playground.CodeGenTargetExt = target.ext;
-            generate();
-        });
-    }
-    Playground.CreateTargetChanger = CreateTargetChanger;
+        PlaygroundEditor.prototype.changeOutputViewerSyntaxHighlight = function (targetMode) {
+            this.changeSyntaxHighlight(this.outputViewer, targetMode);
+        };
 
-    function GetSampleFunction(editor) {
-        return function (sampleName) {
+        PlaygroundEditor.prototype.changeEditorSyntaxHighlight = function (targetMode) {
+            this.changeSyntaxHighlight(this.codeEditor, targetMode);
+        };
+
+        PlaygroundEditor.prototype.changeSyntaxHighlight = function (editor, targetMode) {
+            editor.getSession().setMode("ace/mode/" + targetMode);
+        };
+
+        PlaygroundEditor.prototype.getSampleBody = function (sampleName) {
+            var _this = this;
             var name = sampleName.replace(" - ", "_");
             $.ajax({
                 type: "GET",
                 url: "/samples/" + name + ".bun",
                 success: function (res) {
-                    editor.setValue(res);
-                    editor.clearSelection();
-                    editor.gotoLine(0);
+                    _this.codeEditor.setValue(res);
+                    _this.codeEditor.clearSelection();
+                    _this.codeEditor.gotoLine(0);
                 },
                 error: function () {
                     console.log("error");
                 }
             });
         };
-    }
-    Playground.GetSampleFunction = GetSampleFunction;
 
-    function GetGenerateFunction(editor, viewer) {
-        return function () {
+        PlaygroundEditor.prototype.getGeneratedCode = function () {
+            var _this = this;
+            var e = this.codeEditor;
             $.ajax({
                 type: "POST",
                 url: "/compile",
-                data: JSON.stringify({ source: editor.getValue(), target: Playground.CodeGenTarget, ext: Playground.CodeGenTargetExt }),
+                data: JSON.stringify({ source: e.getValue(), target: this.codeGenTarget, ext: this.codeGenTargetExt }),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
-                    viewer.setValue(res.source);
-                    var session = editor.getSession();
+                    _this.outputViewer.setValue(res.source);
+                    var session = _this.codeEditor.getSession();
                     var errors = ParseError(res.error);
                     if (session.getUseWorker()) {
                         session.setAnnotations(errors);
                         SetHighlightLines(session, errors);
                     }
-                    viewer.clearSelection();
-                    viewer.gotoLine(0);
+                    _this.outputViewer.clearSelection();
+                    _this.outputViewer.gotoLine(0);
                 },
                 error: function () {
                     console.log("error");
                 }
             });
         };
-    }
-    Playground.GetGenerateFunction = GetGenerateFunction;
+
+        PlaygroundEditor.prototype.createSampleSelector = function (query) {
+            var _this = this;
+            var $element = $(query);
+            for (var i = 0; i < Playground.SampleList.length; i++) {
+                $element.append($('<option>').attr({ value: Playground.SampleList[i] }).text(Playground.SampleList[i]));
+            }
+            $element.change(function (e) {
+                _this.getSampleBody($(query + " option:selected").val());
+            });
+        };
+
+        PlaygroundEditor.prototype.createTargetChanger = function (query) {
+            var _this = this;
+            var $element = $(query);
+            jQuery.each(Playground.TargetList, function (key, val) {
+                $element.append($('<option>').attr({ value: key }).text(val.display));
+            });
+            $element.change(function (e) {
+                var target = Playground.TargetList[$(query + " option:selected").val()];
+                _this.changeSyntaxHighlight(_this.outputViewer, target.mode);
+                _this.codeGenTarget = target.option;
+                _this.codeGenTargetExt = target.ext;
+                _this.getGeneratedCode();
+            });
+        };
+        return PlaygroundEditor;
+    })();
+    Playground.PlaygroundEditor = PlaygroundEditor;
 
     function SetHighlightLines(session, errors) {
         ClearHighlightLines(session);
