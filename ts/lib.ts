@@ -2,6 +2,7 @@
 declare var ace: any;
 
 interface PlayOptions {
+    query: string;
     syntax?: string;
     line?: boolean;
     readOnly?: boolean;
@@ -10,42 +11,102 @@ interface PlayOptions {
 
 interface ErrorAnnotation {
     column: number;
-    raw: string;
+    raw?: string;
     row: number;
     text: string;
     type: string;
 }
 
 module Playground {
-    export var CodeGenTarget    = "bun";
-    export var CodeGenTargetExt = "bun";
+
 
     export var ErrorLineMarkers: any[] = [];
 
-    export function CreateEditor(query: string, options: PlayOptions): any {
-        var editor = ace.edit(query);
-        editor.setTheme("ace/theme/xcode");
+    export class PlaygroundEditor {
+        private codeEditor:       any; //ace
+        private outputViewer:     any; //ace
+        private codeGenTarget:    string = "bun";
+        private codeGenTargetExt: string = "bun";
 
-        var syntax = options.syntax != null ? options.syntax : "javascript";
-        this.ChangeSyntaxHighlight(editor, syntax);
-
-        if(options.line == false) {
-            editor.renderer.setShowGutter(false);
+        constructor(editorOptions: PlayOptions, outputOptions: PlayOptions) {
+            this.codeEditor   = this.createEditor(editorOptions.query, editorOptions);
+            this.outputViewer = this.createEditor(outputViewer.query, outputOptions);
         }
 
-        if(!options.checker) {
-            editor.getSession().setUseWorker(false);
+        private createEditor(query: string, options: PlayOptions): any {
+            var editor = ace.edit(query);
+            editor.setTheme("ace/theme/xcode");
+
+            var syntax = options.syntax != null ? options.syntax : "javascript";
+            this.ChangeSyntaxHighlight(editor, syntax);
+
+            if(options.line == false) {
+                editor.renderer.setShowGutter(false);
+            }
+
+            if(!options.checker) {
+                editor.getSession().setUseWorker(false);
+            }
+
+            if(options.readOnly == true) {
+                editor.setReadOnly(true);
+            }
+
+            return editor;
         }
 
-        if(options.readOnly == true) {
-            editor.setReadOnly(true);
+        public changeOutputViewerSyntaxHighlight(targetMode: string): void {
+            this.changeSyntaxHighlight(this.outputViewer, targetMode);
         }
 
-        return editor;
-    }
+        public changeEditorSyntaxHighlight(targetMode: string): void {
+            this.changeSyntaxHighlight(this.codeEditor, targetMode);
+        }
 
-    export function ChangeSyntaxHighlight(editor: any, targetMode: string): void {
-        editor.getSession().setMode("ace/mode/" + targetMode);
+        private changeSyntaxHighlight(editor: any, targetMode: string): void {
+            editor.getSession().setMode("ace/mode/" + targetMode);
+        }
+
+        public getSampleBody(sampleName: string): void {
+            var name = sampleName.replace(" - ", "_");
+            $.ajax({
+                type: "GET",
+                url: "/samples/" + name + ".bun",
+                success: (res) => {
+                    this.codeEditor.setValue(res);
+                    this.codeEditor.clearSelection();
+                    this.codeEditor.gotoLine(0);
+                },
+                error:() => {
+                          console.log("error");
+                }
+            });
+        }
+
+        public getGeneratedCode(): void {
+            var e = this.codeEditor;
+            $.ajax({
+                type: "POST",
+                url: "/compile",
+                data: JSON.stringify({source: e.getValue(), target: CodeGenTarget, ext: CodeGenTargetExt}),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: (res) => {
+                    viewer.setValue(res.source);
+                    var session = editor.getSession();
+                    var errors = ParseError(res.error);
+                    if(session.getUseWorker()) {
+                        session.setAnnotations(errors);
+                        SetHighlightLines(session, errors);
+                    }
+                    viewer.clearSelection();
+                    viewer.gotoLine(0);
+                },
+                error: () => {
+                    console.log("error");
+                }
+            });
+        }
     }
 
     export function CreateSampleSelector(query: string, getSample: (val: string)=>void): void {
@@ -70,50 +131,6 @@ module Playground {
             CodeGenTargetExt = target.ext;
             generate();
         });
-    }
-
-    export function GetSampleFunction(editor: any): (sampleName: string) => void {
-        return (sampleName: string) => {
-            var name = sampleName.replace(" - ", "_");
-            $.ajax({
-                type: "GET",
-                url: "/samples/" + name + ".bun",
-                success: (res) => {
-                    editor.setValue(res);
-                    editor.clearSelection();
-                    editor.gotoLine(0);
-                },
-                error:() => {
-                      console.log("error");
-                }
-            });
-        };
-    }
-
-    export function GetGenerateFunction(editor: any, viewer: any): () => void {
-        return () => {
-            $.ajax({
-                type: "POST",
-                url: "/compile",
-                data: JSON.stringify({source: editor.getValue(), target: CodeGenTarget, ext: CodeGenTargetExt}),
-                dataType: 'json',
-                contentType: "application/json; charset=utf-8",
-                success: (res) => {
-                    viewer.setValue(res.source);
-                    var session = editor.getSession();
-                    var errors = ParseError(res.error);
-                    if(session.getUseWorker()) {
-                        session.setAnnotations(errors);
-                        SetHighlightLines(session, errors);
-                    }
-                    viewer.clearSelection();
-                    viewer.gotoLine(0);
-                },
-                error: () => {
-                    console.log("error");
-                }
-            });
-        };
     }
 
     export function SetHighlightLines(session: any, errors: ErrorAnnotation[]): void {
@@ -152,7 +169,7 @@ module Playground {
                 row:  Number(it[1]) - 1,
                 type: it[2], // error | warning
                 text: it[3], // body of error message
-                raw:  it[3], // body of error message
+                //raw:  it[3], // body of error message
                 column: 0
             };
         });

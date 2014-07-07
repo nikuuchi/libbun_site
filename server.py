@@ -20,8 +20,9 @@ def createSourceFile(name, contents):
     f.write(contents)
     f.close()
 
-def compileCommand(name, target):
-    return commands.getoutput('java -jar {0}/../libbun-0.1.jar -t {1} -o {2} {3}'.format(rootPath, target, name[:-4], name))
+def compileCommand(name, target, ext):
+    print 'java -jar {0}/../libbun2.jar -d {1} {3} > {2} '.format(rootPath, target, name[:-4] + ext, name)
+    return commands.getoutput('java -jar {0}/../libbun2.jar -d {1} {2} > {3}.{4} '.format(rootPath, target, name, name[:-4], ext))
 
 def readCompiledFile(name):
     if os.path.exists(name):
@@ -55,7 +56,7 @@ def compile():
     file.close() #tempfile cannot use utf-8 in python 2.7, so need to reopen
 
     createSourceFile(name, request.json["source"])
-    error_message = compileCommand(name, request.json["target"])
+    error_message = compileCommand(name, request.json["target"], request.json["ext"])
 
     readFileName = name[:-4] + "." + request.json["ext"]
     message = readCompiledFile(readFileName)

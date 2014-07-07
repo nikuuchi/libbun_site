@@ -146,7 +146,7 @@ var Playground;
                 row: Number(it[1]) - 1,
                 type: it[2],
                 text: it[3],
-                raw: it[3],
+                //raw:  it[3], // body of error message
                 column: 0
             };
         });
