@@ -26,16 +26,22 @@ module Playground {
     export class PlaygroundEditor {
         public  codeEditor:       any; //ace
         public  outputViewer:     any; //ace
-        private codeGenTarget:    string = "peg";
-        private codeGenTargetExt: string = "peg";
+        public  pegEditor:     any; //ace
+        private codeGenTarget:    string = "py";
+        private codeGenTargetExt: string = "py";
 
-        constructor(editorOptions: PlayOptions, outputOptions: PlayOptions) {
-            this.codeEditor   = this.createEditor(editorOptions.query, editorOptions);
-            this.outputViewer = this.createEditor(outputOptions.query, outputOptions);
+        constructor(editorOptions: PlayOptions, outputOptions: PlayOptions, pegOptions?: PlayOptions) {
+            this.codeEditor   = this.createEditor(editorOptions);
+            this.outputViewer = this.createEditor(outputOptions);
+            if(pegOptions) {
+                this.pegEditor = this.createEditor(pegOptions);
+            } else {
+                this.pegEditor = null;
+            }
         }
 
-        private createEditor(query: string, options: PlayOptions): any {
-            var editor = ace.edit(query);
+        private createEditor(options: PlayOptions): any {
+            var editor = ace.edit(options.query);
             editor.setTheme("ace/theme/xcode");
 
             var syntax = options.syntax != null ? options.syntax : "javascript";

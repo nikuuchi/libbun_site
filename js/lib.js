@@ -6,14 +6,19 @@ var Playground;
     Playground.ErrorLineMarkers = [];
 
     var PlaygroundEditor = (function () {
-        function PlaygroundEditor(editorOptions, outputOptions) {
-            this.codeGenTarget = "peg";
-            this.codeGenTargetExt = "peg";
-            this.codeEditor = this.createEditor(editorOptions.query, editorOptions);
-            this.outputViewer = this.createEditor(outputOptions.query, outputOptions);
+        function PlaygroundEditor(editorOptions, outputOptions, pegOptions) {
+            this.codeGenTarget = "py";
+            this.codeGenTargetExt = "py";
+            this.codeEditor = this.createEditor(editorOptions);
+            this.outputViewer = this.createEditor(outputOptions);
+            if (pegOptions) {
+                this.pegEditor = this.createEditor(pegOptions);
+            } else {
+                this.pegEditor = null;
+            }
         }
-        PlaygroundEditor.prototype.createEditor = function (query, options) {
-            var editor = ace.edit(query);
+        PlaygroundEditor.prototype.createEditor = function (options) {
+            var editor = ace.edit(options.query);
             editor.setTheme("ace/theme/xcode");
 
             var syntax = options.syntax != null ? options.syntax : "javascript";
