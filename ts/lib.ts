@@ -26,8 +26,8 @@ module Playground {
     export class PlaygroundEditor {
         public  codeEditor:       any; //ace
         public  outputViewer:     any; //ace
-        private codeGenTarget:    string = "bun";
-        private codeGenTargetExt: string = "bun";
+        private codeGenTarget:    string = "peg";
+        private codeGenTargetExt: string = "peg";
 
         constructor(editorOptions: PlayOptions, outputOptions: PlayOptions) {
             this.codeEditor   = this.createEditor(editorOptions.query, editorOptions);

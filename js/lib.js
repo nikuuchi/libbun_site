@@ -7,8 +7,8 @@ var Playground;
 
     var PlaygroundEditor = (function () {
         function PlaygroundEditor(editorOptions, outputOptions) {
-            this.codeGenTarget = "bun";
-            this.codeGenTargetExt = "bun";
+            this.codeGenTarget = "peg";
+            this.codeGenTargetExt = "peg";
             this.codeEditor = this.createEditor(editorOptions.query, editorOptions);
             this.outputViewer = this.createEditor(outputOptions.query, outputOptions);
         }
