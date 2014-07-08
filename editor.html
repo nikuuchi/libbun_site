@@ -1,18 +1,13 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>The Libbun Programming Language</title><link rel="stylesheet" href="css/bootstrap.css"/><link rel="stylesheet" href="css/styles.css"/><style type="text/css" media="screen">#bun-editor {
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>The Libbun Programming Language</title><link rel="stylesheet" href="css/bootstrap.css"/><link rel="stylesheet" href="css/styles.css"/><style type="text/css" media="screen">#peg-editor {
   height: 350px;
-  border: 1px solid black;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
+}
+#bun-editor {
+  height: 350px;
 }
 #output-viewer {
   height: 300px;
-  border-bottom: 1px solid black;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
 }</style></head><body><nav role="navigation" class="navbar navbar-default navbar-fixed-top"><div class="container-fluid"><div class="navbar-header"><a href="/" style="color: #000;" class="navbar-brand">The Libbun Playground</a></div></div></nav><div style="padding-bottom: 3px; padding-top: 18px;" class="row"><div class="form-inline">Sample:&nbsp;<select id="sample-selector" class="form-control"></select>&nbsp;
-Translate into:&nbsp;<select id="generator-selector" class="form-control"></select>&nbsp;<a id="translate" href="#" role="button" class="btn btn-primary">Translate</a>&nbsp;<a id="share" href="#" role="button" class="btn btn-default">Share</a>&nbsp;<input id="url-display" type="text" readonly="readonly" style="display: none; cursor:default;" size="38" class="form-control"></div></div><div class="row"><div id="bun-editor">export function main() {
+Translate into:&nbsp;<select id="generator-selector" class="form-control"></select>&nbsp;<a id="translate" href="#" role="button" class="btn btn-primary">Translate</a>&nbsp;<a id="share" href="#" role="button" class="btn btn-default">Share</a>&nbsp;<input id="url-display" type="text" readonly="readonly" style="display: none; cursor:default;" size="38" class="form-control"></div></div><div class="row"><div id="accordion" class="panel-group"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse-peg">Peg Source</a></h4></div><div id="collapse-peg" class="panel-collapse collapse"><div id="peg-editor">//Peg</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse-bun">Input Source</a></h4></div><div id="collapse-bun" class="panel-collapse collapse in"><div id="bun-editor">export function main() {
 &#9;assert(true);
 &#9;println("#Hello,world");
-}</div><div id="output-viewer">//Output</div></div><div class="script"><script type="text/javascript" src="js/jquery.js"></script><script type="text/javascript" src="js/bootstrap.min.js"></script><script type="text/javascript" src="js/ace/ace.js"></script><script type="text/javascript" src="js/config.js"></script><script type="text/javascript" src="js/lib.js"></script><script type="text/javascript" src="js/editor.js"></script></div></body></html>
+}</div></div></div><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a href="#">Output</a></h4></div><div class="panel-collapse"><div id="output-viewer">//Output</div></div></div></div></div><div class="script"><script type="text/javascript" src="js/jquery.js"></script><script type="text/javascript" src="js/bootstrap.min.js"></script><script type="text/javascript" src="js/ace/ace.js"></script><script type="text/javascript" src="js/config.js"></script><script type="text/javascript" src="js/lib.js"></script><script type="text/javascript" src="js/editor.js"></script></div></body></html>

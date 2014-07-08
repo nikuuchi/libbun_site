@@ -8,19 +8,14 @@ html(lang='en')
     +css('css/bootstrap.css')
     +css('css/styles.css')
     style(type='text/css', media='screen').
+      #peg-editor {
+        height: 350px;
+      }
       #bun-editor {
         height: 350px;
-        border: 1px solid black;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
       }
       #output-viewer {
         height: 300px;
-        border-bottom: 1px solid black;
-        border-left: 1px solid black;
-        border-right: 1px solid black;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
       }
   body
     nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
@@ -41,13 +36,31 @@ html(lang='en')
         | &nbsp;
         input.form-control#url-display(type='text', readonly="readonly", style="display: none; cursor:default;", size='38')
     .row
-      #bun-editor
-        | export function main() {
-        | &#9;assert(true);
-        | &#9;println("#Hello,world");
-        | }
-      #output-viewer
-        | //Output
+      .panel-group#accordion
+        .panel.panel-default
+            .panel-heading
+              h4.panel-title
+                a(data-toggle="collapse" data-parent="#accordion" href="#collapse-peg") Peg Source
+            .panel-collapse.collapse#collapse-peg
+              #peg-editor
+                | //Peg
+        .panel.panel-default
+            .panel-heading
+              h4.panel-title
+                a(data-toggle="collapse" data-parent="#accordion" href="#collapse-bun") Input Source
+            .panel-collapse.collapse.in#collapse-bun
+              #bun-editor
+                | export function main() {
+                | &#9;assert(true);
+                | &#9;println("#Hello,world");
+                | }
+        .panel.panel-default
+            .panel-heading
+              h4.panel-title
+                a(href='#') Output
+            .panel-collapse
+              #output-viewer
+                | //Output
     .script
       +js('js/jquery.js')
       +js('js/bootstrap.min.js')

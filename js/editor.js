@@ -11,6 +11,10 @@ $(function () {
     }, {
         query: "output-viewer",
         readOnly: true
+    }, {
+        query: "peg-editor",
+        syntax: "typescript",
+        checker: true
     });
 
     Debug.component = component;
