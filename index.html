@@ -1,14 +1,8 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>The Libbun Parser Library</title><link rel="stylesheet" href="css/bootstrap.css"/><link rel="stylesheet" href="css/styles.css"/><style type="text/css" media="screen">#bun-editor {
   height: 230px;
-  border: 1px solid black;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
 }
 #output-viewer {
   height: 150px;
-  border: 1px solid black;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
 }</style></head><body><nav role="navigation" class="navbar navbar-default navbar-fixed-top"><div class="container-fluid"><div class="navbar-header"><a href="#" style="color: #000;" class="navbar-brand">The Libbun Parser Library</a></div></div></nav><div style="max-width: 1280px; min-width: 780px; padding-top: 30px;" class="container"><div class="row"><div class="col-md-6 col-xs-6 col-sm-6 col-lg-6"><h3>Overview</h3><p>Libbun is an open source parser and generator library that makes it easy to translate your program into another language.</p><p><a href="https://github.com/libbun/libbun/archive/master.zip" class="btn btn-primary">Download Libbun</a>&nbsp;<a href="https://github.com/libbun/libbun" class="btn btn-default">Get Source Code</a></p><h3>Documents</h3><p><a href="#">BunLanguage Grammar</a></p><p><a href="#">How to develop a new generator for your favorite language</a></p><p><a href="#">Libbun API Reference</a></p></div><div class="col-md-6 col-xs-6 col-sm-6 col-lg-6"><h3>Try Libbun</h3><p><div style="font-size: 16px;" class="form-inline">Sample:&nbsp;<select id="sample-selector" class="form-control"></select>&nbsp;
 into:&nbsp;<select id="generator-selector" class="form-control"></select>&nbsp;<a id="translate" href="#" role="button" class="btn btn-primary">Translate</a>&nbsp;<a id="fullscreen" href="#" class="btn btn-default"><span class="glyphicon glyphicon-resize-full"></span></a></div></p><p><div id="accordion" class="panel-group"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title"><a href="#">Input</a></h4></div><div class="panel-collapse collapse in"><div id="bun-editor">export function main() {
 &#9;assert(true);
