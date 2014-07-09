@@ -40,14 +40,16 @@ html(lang='en')
         .panel.panel-default
             .panel-heading
               h4.panel-title
-                a(data-toggle="collapse" data-parent="#accordion" href="#collapse-peg") Peg Source
+                a#peg-source-toggle(data-toggle="collapse" data-parent="#accordion" href="#collapse-peg") Peg Source &nbsp;
+                  span.glyphicon.glyphicon-chevron-down
             .panel-collapse.collapse#collapse-peg
               #peg-editor
                 | //Peg
         .panel.panel-default
             .panel-heading
               h4.panel-title
-                a(data-toggle="collapse" data-parent="#accordion" href="#collapse-bun") Input Source
+                a#input-source-toggle(data-toggle="collapse" data-parent="#accordion" href="#collapse-bun") Input Source &nbsp;
+                  span.glyphicon.glyphicon-chevron-up
             .panel-collapse.collapse.in#collapse-bun
               #bun-editor
                 | export function main() {

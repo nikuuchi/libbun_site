@@ -89,4 +89,25 @@ $(function () {
     } else {
         component.getGeneratedCode();
     }
+
+    var $togglePegBar = $("#peg-source-toggle");
+    var $toggleInputBar = $("#input-source-toggle");
+    var toggleEventFunc = function () {
+        if ($togglePegBar.attr("class") == "") {
+            $togglePegBar.children()[0].className = "glyphicon glyphicon-chevron-up";
+        } else {
+            $togglePegBar.children()[0].className = "glyphicon glyphicon-chevron-down";
+        }
+        if ($toggleInputBar.attr("class") == "") {
+            $toggleInputBar.children()[0].className = "glyphicon glyphicon-chevron-up";
+        } else {
+            $toggleInputBar.children()[0].className = "glyphicon glyphicon-chevron-down";
+        }
+    };
+    $togglePegBar.click(function (e) {
+        setTimeout(toggleEventFunc, 100);
+    });
+    $toggleInputBar.click(function (e) {
+        setTimeout(toggleEventFunc, 100);
+    });
 });
