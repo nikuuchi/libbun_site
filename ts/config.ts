@@ -1,9 +1,11 @@
 module Playground {
-    export var SampleList = ["HelloWorld","BinaryTrees", "Fibonacci", "FizzBuzz", "Python - HelloWorld", "Python - Fibonacci"];
+    export var SampleList = ["HelloWorld", "Fibonacci", "FizzBuzz"];
+
+    export var SamplePegList = ["Konoha", "C", "JavaScript", "Python"];
 
     export var TargetList = {
         py:   { display: "Python",     ext: "py",   option: "py",                    mode: "python"},
-        peg:  { display: "Peg",        ext: "peg",  option: "peg",                   mode: "typescript"},
+        peg:  { display: "AST Dump",   ext: "peg",  option: "peg",                   mode: "typescript"},
         //bun:  { display: "Bun",        ext: "bun",  option: "bun",                   mode: "typescript"},
         //c:    { display: "C",          ext: "c",    option: "c",                     mode: "c_cpp"},
         //cl:   { display: "CommonLisp", ext: "cl",   option: "cl",                    mode: "lisp"},

@@ -95,17 +95,19 @@ $(() => {
     var $togglePegBar = $("#peg-source-toggle");
     var $toggleInputBar = $("#input-source-toggle");
     var toggleEventFunc = () => {
-        if($togglePegBar.attr("class") ==  "") {
+        if($togglePegBar.attr("class") ==  ""/* if opened */) {
             $togglePegBar.children()[0].className = "glyphicon glyphicon-chevron-up";
         } else {
             $togglePegBar.children()[0].className = "glyphicon glyphicon-chevron-down";
         }
-        if($toggleInputBar.attr("class") ==  "") {
+        if($toggleInputBar.attr("class") ==  ""/* if opened */) {
             $toggleInputBar.children()[0].className = "glyphicon glyphicon-chevron-up";
+            $("#sample-selector")[0].disabled = false;
         } else {
             $toggleInputBar.children()[0].className = "glyphicon glyphicon-chevron-down";
+            $("#sample-selector")[0].disabled = true;
         }
     };
-    $togglePegBar.click((e:Event) => { setTimeout(toggleEventFunc, 100); } );
-    $toggleInputBar.click((e:Event) => { setTimeout(toggleEventFunc, 100); } );
+    $togglePegBar.click((e:Event) => { setTimeout(toggleEventFunc, 150); } );
+    $toggleInputBar.click((e:Event) => { setTimeout(toggleEventFunc, 150); } );
 });

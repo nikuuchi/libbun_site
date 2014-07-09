@@ -100,14 +100,16 @@ $(function () {
         }
         if ($toggleInputBar.attr("class") == "") {
             $toggleInputBar.children()[0].className = "glyphicon glyphicon-chevron-up";
+            $("#sample-selector")[0].disabled = false;
         } else {
             $toggleInputBar.children()[0].className = "glyphicon glyphicon-chevron-down";
+            $("#sample-selector")[0].disabled = true;
         }
     };
     $togglePegBar.click(function (e) {
-        setTimeout(toggleEventFunc, 100);
+        setTimeout(toggleEventFunc, 150);
     });
     $toggleInputBar.click(function (e) {
-        setTimeout(toggleEventFunc, 100);
+        setTimeout(toggleEventFunc, 150);
     });
 });

@@ -1,10 +1,12 @@
 var Playground;
 (function (Playground) {
-    Playground.SampleList = ["HelloWorld", "BinaryTrees", "Fibonacci", "FizzBuzz", "Python - HelloWorld", "Python - Fibonacci"];
+    Playground.SampleList = ["HelloWorld", "Fibonacci", "FizzBuzz"];
+
+    Playground.SamplePegList = ["Konoha", "C", "JavaScript", "Python"];
 
     Playground.TargetList = {
         py: { display: "Python", ext: "py", option: "py", mode: "python" },
-        peg: { display: "Peg", ext: "peg", option: "peg", mode: "typescript" },
+        peg: { display: "AST Dump", ext: "peg", option: "peg", mode: "typescript" },
         //bun:  { display: "Bun",        ext: "bun",  option: "bun",                   mode: "typescript"},
         //c:    { display: "C",          ext: "c",    option: "c",                     mode: "c_cpp"},
         //cl:   { display: "CommonLisp", ext: "cl",   option: "cl",                    mode: "lisp"},
