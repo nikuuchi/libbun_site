@@ -21,7 +21,7 @@ def createSourceFile(name, contents):
     f.close()
 
 def compileCommandWithPeg(name, target, ext, pegname):
-    print 'hello'
+    print 'java -jar {0}/../libbun2.jar -l {5} -d {1} {2} > {3}.{4} '.format(rootPath, target, name, name[:-4], ext, pegname)
     return commands.getoutput('java -jar {0}/../libbun2.jar -l {5} -d {1} {2} > {3}.{4} '.format(rootPath, target, name, name[:-4], ext, pegname))
 
 def compileCommand(name, target, ext):

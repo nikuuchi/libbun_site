@@ -80,7 +80,9 @@ $(function () {
             success: function (res) {
                 bunEditor.setValue(res);
                 bunEditor.clearSelection();
-                component.getGeneratedCode();
+                component.getPegBody("konoha", function () {
+                    component.getGeneratedCode();
+                });
                 location.hash = url;
             },
             error: function () {
@@ -88,9 +90,10 @@ $(function () {
             }
         });
     } else {
-        component.getGeneratedCode();
+        component.getPegBody("konoha", function () {
+            component.getGeneratedCode();
+        });
     }
-    component.getPegBody("konoha");
 
     var $togglePegBar = $("#peg-source-toggle");
     var $toggleInputBar = $("#input-source-toggle");

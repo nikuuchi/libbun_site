@@ -74,7 +74,7 @@ module Playground {
             editor.getSession().setMode("ace/mode/" + targetMode);
         }
 
-        public getPegBody(sampleName: string): void {
+        public getPegBody(sampleName: string, func?: any): void {
             var name = sampleName.replace(" - ", "_");
             $.ajax({
                 type: "GET",
@@ -84,6 +84,9 @@ module Playground {
                         this.pegEditor.setValue(res);
                         this.pegEditor.clearSelection();
                         this.pegEditor.gotoLine(0);
+                        if(func) {
+                            func()
+                        }
                     }
                 },
                 error:() => {

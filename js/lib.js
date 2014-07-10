@@ -51,7 +51,7 @@ var Playground;
             editor.getSession().setMode("ace/mode/" + targetMode);
         };
 
-        PlaygroundEditor.prototype.getPegBody = function (sampleName) {
+        PlaygroundEditor.prototype.getPegBody = function (sampleName, func) {
             var _this = this;
             var name = sampleName.replace(" - ", "_");
             $.ajax({
@@ -62,6 +62,9 @@ var Playground;
                         _this.pegEditor.setValue(res);
                         _this.pegEditor.clearSelection();
                         _this.pegEditor.gotoLine(0);
+                        if (func) {
+                            func();
+                        }
                     }
                 },
                 error: function () {
