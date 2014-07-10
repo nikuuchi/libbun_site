@@ -71,6 +71,7 @@ $(() => {
 
     component.createTargetChanger("#generator-selector");
     component.createSampleSelector("#sample-selector");
+    component.createPegSelector("#peg-selector");
 
     if(location.hash != "" && location.hash != null) {
         var url = location.hash;
@@ -91,21 +92,24 @@ $(() => {
     } else {
         component.getGeneratedCode();
     }
+    component.getPegBody("konoha");
 
     var $togglePegBar = $("#peg-source-toggle");
     var $toggleInputBar = $("#input-source-toggle");
     var toggleEventFunc = () => {
         if($togglePegBar.attr("class") ==  ""/* if opened */) {
             $togglePegBar.children()[0].className = "glyphicon glyphicon-chevron-up";
+            //$("#peg-selector")[0].disabled = true;
         } else {
             $togglePegBar.children()[0].className = "glyphicon glyphicon-chevron-down";
+            //$("#peg-selector")[0].disabled = false;
         }
         if($toggleInputBar.attr("class") ==  ""/* if opened */) {
             $toggleInputBar.children()[0].className = "glyphicon glyphicon-chevron-up";
-            $("#sample-selector")[0].disabled = false;
+            //$("#sample-selector")[0].disabled = false;
         } else {
             $toggleInputBar.children()[0].className = "glyphicon glyphicon-chevron-down";
-            $("#sample-selector")[0].disabled = true;
+            //$("#sample-selector")[0].disabled = true;
         }
     };
     $togglePegBar.click((e:Event) => { setTimeout(toggleEventFunc, 150); } );

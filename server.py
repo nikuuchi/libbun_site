@@ -20,6 +20,10 @@ def createSourceFile(name, contents):
     f.write(contents)
     f.close()
 
+def compileCommandWithPeg(name, target, ext, pegname):
+    print 'hello'
+    return commands.getoutput('java -jar {0}/../libbun2.jar -l {5} -d {1} {2} > {3}.{4} '.format(rootPath, target, name, name[:-4], ext, pegname))
+
 def compileCommand(name, target, ext):
     print 'java -jar {0}/../libbun2.jar -d {1} {3} > {2} '.format(rootPath, target, name[:-4] + ext, name)
     return commands.getoutput('java -jar {0}/../libbun2.jar -d {1} {2} > {3}.{4} '.format(rootPath, target, name, name[:-4], ext))
@@ -55,8 +59,20 @@ def compile():
     name = file.name
     file.close() #tempfile cannot use utf-8 in python 2.7, so need to reopen
 
+    pegfile = tempfile.NamedTemporaryFile(mode='w', suffix='.peg', prefix='tmp', dir='/tmp')
+    pegname = pegfile.name
+    pegfile.close()
+
+    pegsource = False
+    if "pegsource" in request.json:
+        createSourceFile(pegname, request.json["pegsource"])
+        pegsource = True
     createSourceFile(name, request.json["source"])
-    error_message = compileCommand(name, request.json["target"], request.json["ext"])
+
+    if not pegsource:
+        error_message = compileCommand(name, request.json["target"], request.json["ext"])
+    else:
+        error_message = compileCommandWithPeg(name, request.json["target"], request.json["ext"], pegname)
 
     readFileName = name[:-4] + "." + request.json["ext"]
     message = readCompiledFile(readFileName)
@@ -88,6 +104,10 @@ def getShareCode(filename):
 @app.route('/samples/<filename>')
 def server_static(filename):
     return static_file(filename, root=rootPath + '/../sample')
+
+@app.route('/pegs/<filename>')
+def server_static(filename):
+    return static_file(filename, root=rootPath + '/../pegs')
 
 @app.route('/<filepath:path>')
 def server_static(filepath):

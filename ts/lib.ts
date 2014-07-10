@@ -74,6 +74,24 @@ module Playground {
             editor.getSession().setMode("ace/mode/" + targetMode);
         }
 
+        public getPegBody(sampleName: string): void {
+            var name = sampleName.replace(" - ", "_");
+            $.ajax({
+                type: "GET",
+                url: "/pegs/" + name + ".peg",
+                success: (res) => {
+                    if(this.pegEditor != null) {
+                        this.pegEditor.setValue(res);
+                        this.pegEditor.clearSelection();
+                        this.pegEditor.gotoLine(0);
+                    }
+                },
+                error:() => {
+                          console.log("error");
+                }
+            });
+        }
+
         public getSampleBody(sampleName: string): void {
             var name = sampleName.replace(" - ", "_");
             $.ajax({
@@ -92,10 +110,14 @@ module Playground {
 
         public getGeneratedCode(): void {
             var e = this.codeEditor;
+            var peg = null;
+            if(this.pegEditor != null) {
+                peg = this.pegEditor.getValue();
+            }
             $.ajax({
                 type: "POST",
                 url: "/compile",
-                data: JSON.stringify({source: e.getValue(), target: this.codeGenTarget, ext: this.codeGenTargetExt}),
+                data: JSON.stringify({source: e.getValue(), target: this.codeGenTarget, ext: this.codeGenTargetExt, pegsource: peg}),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 success: (res) => {
@@ -112,6 +134,24 @@ module Playground {
                 error: () => {
                     console.log("error");
                 }
+            });
+        }
+
+        public createPegSelector(query: string): void {
+            //var $element = $(query);
+            //for(var i = 0; i < SamplePegList.length; i++) {
+            //    $element.append($('<option>').attr({ value: SamplePegList[i] }).text(SamplePegList[i]));
+            //}
+            //$element.change((e:Event) => {
+            //    this.getPegBody($(query + " option:selected").val().toLowerCase());
+            //});
+            var $element = $(query);
+            jQuery.each(SamplePegList, (key, val) => {
+                $element.append($('<option>').attr({ value: key }).text(val.display));
+            });
+            $element.change((e:Event) => {
+                var target = SamplePegList[$(query + " option:selected").val()];
+                this.getPegBody(target.option);
             });
         }
 

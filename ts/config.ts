@@ -1,7 +1,13 @@
 module Playground {
     export var SampleList = ["HelloWorld", "Fibonacci", "FizzBuzz"];
 
-    export var SamplePegList = ["Konoha", "C", "JavaScript", "Python"];
+    export var SamplePegList = {
+        konoha: {display: "Konoha", option: "konoha"},
+        c: {display: "C", option: "bun-c"},
+        javascript: {display: "JavaScript", option: "JavaScript"},
+        python: {display: "Python", option: "python"},
+        csv: {display: "CSV", option: "csv_parallel"}
+    };
 
     export var TargetList = {
         py:   { display: "Python",     ext: "py",   option: "py",                    mode: "python"},

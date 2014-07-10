@@ -2,7 +2,13 @@ var Playground;
 (function (Playground) {
     Playground.SampleList = ["HelloWorld", "Fibonacci", "FizzBuzz"];
 
-    Playground.SamplePegList = ["Konoha", "C", "JavaScript", "Python"];
+    Playground.SamplePegList = {
+        konoha: { display: "Konoha", option: "konoha" },
+        c: { display: "C", option: "bun-c" },
+        javascript: { display: "JavaScript", option: "JavaScript" },
+        python: { display: "Python", option: "python" },
+        csv: { display: "CSV", option: "csv_parallel" }
+    };
 
     Playground.TargetList = {
         py: { display: "Python", ext: "py", option: "py", mode: "python" },
